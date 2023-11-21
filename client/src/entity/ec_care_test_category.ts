@@ -1,10 +1,10 @@
 export class ec_care_test_category {
   id: number | null;
-  name: number;
+  name: string;
   description: string;
   price: number;
   type: string;
-  table_name: string;
+  table_name: string | null;
   status: number;
   created_at: Date | string | null;
   updated_at: Date | string | null;

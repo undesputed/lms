@@ -3,7 +3,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import * as ServiceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import React from "react";
@@ -28,4 +27,3 @@ root.render(
   </React.StrictMode>
 );
 
-ServiceWorker.unregister();

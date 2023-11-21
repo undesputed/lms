@@ -1,4 +1,4 @@
-import { Container, Box, Paper } from "@mui/material";
+import { Container, Box, Paper, Typography, Grid, IconButton, Button } from "@mui/material";
 import React, { useReducer } from "react";
 import { Helmet } from "react-helmet-async";
 import SectionHeader from "../component/SectionHeader";
@@ -9,7 +9,6 @@ import {
   GridColDef,
   GridRowId,
   GridToolbar,
-  GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { reducer } from "./reducer";
 import { initialState } from "./initialState";
@@ -23,10 +22,13 @@ import Preview from "../component/Preview";
 import { fetchByFieldId } from "../../../reducers/testCategoryField/testCategoryFIeldSlice";
 import EditTestModal from "../component/EditTest";
 import { fetchTestField } from "../../../reducers/testField/testFieldSlice";
+import { BiPlusCircle } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const ManageTest = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Start of Fetching Functions
   const retrieveTestCategory = async () => {
@@ -101,6 +103,9 @@ const ManageTest = () => {
     onOpenPreviewModal();
   };
 
+  const onClickAddTest = () => {
+    navigate("/admin/dashboard/addTest");
+  }
   // End of Button Events
 
   // Start of On Change Events
@@ -231,6 +236,16 @@ const ManageTest = () => {
         </ModalComponent>
         <Paper sx={{ p: { xs: 2, md: 3, width: "100%" } }}>
           <SectionHeader title="TEST MANAGEMENT" />
+          <Box my={2}>
+            <Box
+              display={"flex"}
+              justifyContent={"left"}
+            >
+              <Button variant="outlined" endIcon={<BiPlusCircle />} onClick={onClickAddTest}>
+                Add New Test
+              </Button>
+            </Box>
+          </Box>
           <DataGrid
             rows={state.testCategory}
             columns={columns}

@@ -8,11 +8,11 @@ import SidebarLayout from "../components/SidebarLayout";
 import React from "react";
 
 const Loader = (Component: any) => (props: any) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 //Pages
 const Landing = Loader(lazy(() => import("../pages/landing")));
@@ -29,6 +29,7 @@ const PrintResult = Loader(
   lazy(() => import("../pages/admin/views/PrintResult"))
 );
 const ManageTest = Loader(lazy(() => import("../pages/admin/ManageTest")));
+const AddTestPPage = Loader(lazy(() => import("../pages/admin/views/AddTest")));
 
 //Component
 
@@ -85,6 +86,10 @@ const routes: RouteObject[] = [
           {
             path: "test",
             element: <ManageTest />,
+          },
+          {
+            path: "addTest",
+            element: <AddTestPPage />,
           },
         ],
       },

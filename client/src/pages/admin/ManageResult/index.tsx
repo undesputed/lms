@@ -470,7 +470,7 @@ const ManageResult = () => {
                     paddingX={1}
                     sx={{ fontWeight: 400 }}
                   >
-                    ₱ {state.total.toLocaleString()}
+                    ₱ {state.total?.toLocaleString()}
                   </Typography>
                 </Box>
               </Grid>
