@@ -27,7 +27,9 @@ export default class TestCatTestField {
     this.updated_at = testCatTestField.updated_at;
   }
 
-  static async create(newTestCatTestField: Test): Promise<Test | null> {
+  static async create(
+    newTestCatTestField: TestCatTestField
+  ): Promise<TestCatTestField | null> {
     return new Promise((resolve, reject) => {
       const query = "INSERT INTO lms_test_cat_test_field SET ?";
 

@@ -20,6 +20,8 @@ import { updatePatient } from "./routes/patient/updatePatient";
 import { deleteTestResult } from "./routes/testResult/deleteTestResult";
 import { testField } from "./routes/testField/testField";
 import { testCategoryField } from "./routes/testFieldCategory/testFieldCategory";
+import { createPatientResult } from "./routes/patientResult/createPatientResult";
+import { createTestFieldCategory } from "./routes/testFieldCategory/createTestFieldCategory";
 
 const app = express();
 var corsOptions = {
@@ -41,6 +43,8 @@ app.use(testCategoryField);
 app.use(createPatient);
 app.use(createTests);
 app.use(createTestResult);
+app.use(createPatientResult);
+app.use(createTestFieldCategory);
 
 // Update
 app.use(updateTestResult);
