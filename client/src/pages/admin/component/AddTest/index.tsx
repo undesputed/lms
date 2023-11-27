@@ -42,6 +42,7 @@ interface AddTestProps {
   onChecked: (selection: any) => void;
   onSubmit: () => void;
   patient_id: number | string;
+  onCancel: () => void;
 }
 
 const AddNewTest: React.FC<AddTestProps> = ({
@@ -50,6 +51,7 @@ const AddNewTest: React.FC<AddTestProps> = ({
   onChecked,
   onSubmit,
   patient_id,
+  onCancel
 }) => {
   return (
     <Box>
@@ -92,8 +94,9 @@ const AddNewTest: React.FC<AddTestProps> = ({
           size="medium"
           variant="contained"
           sx={{ backgroundColor: "#3695D1", mx: 1 }}
+          onClick={onCancel}
         >
-          Back
+          Cancel
         </Button>
       </Box>
     </Box>

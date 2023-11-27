@@ -51,3 +51,7 @@ export function updateTestResult(
 export function deleteTestResult(id: number | string): Promise<any> {
   return API.delete<any>(`testResult/${id}`).then((res) => res.data);
 }
+
+export function deleteTestResultByTest(test_id: number | string): Promise<any> {
+  return API.delete<any>(`testResult/byTest/${test_id}`).then((res) => res.data);
+}

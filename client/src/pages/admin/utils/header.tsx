@@ -11,11 +11,20 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../../../assets/image/logo/Logo White-01.png";
 import "../../../assets/scss/Header/header.scss";
+import { useNavigate } from "react-router-dom";
 
 const AdminHeader = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const onNavigateTest = () => {
+    navigate("/admin/dashboard/test");
+  }
+
+  const onNavigateHome = () => {
+    navigate("/admin/dashboard/");
+  }
   return (
     <AppBar
       position="relative"
@@ -26,13 +35,15 @@ const AdminHeader = () => {
         <img
           src={logo}
           alt="Logo"
-          style={{ width: 70, height: 70, marginRight: 10 }}
+          style={{ width: 70, height: 70, marginRight: 10, cursor: "pointer" }}
+          onClick={onNavigateHome}
         />
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 3 }}
+          sx={{ flexGrow: 3, cursor: "pointer" }}
           className="logo-label"
+          onClick={onNavigateHome}
         >
           EC Care Medical Laboratory
         </Typography>
@@ -42,7 +53,7 @@ const AdminHeader = () => {
           </IconButton>
         ) : (
           <div>
-            <Button color="inherit">About Us</Button>
+            <Button color="inherit" onClick={onNavigateTest}>Add Test</Button>
             <Button color="inherit">Contact Us</Button>
             <Button color="inherit">Services</Button>
             <Button color="inherit">FAQs</Button>

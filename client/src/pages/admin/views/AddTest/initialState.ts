@@ -5,6 +5,7 @@ export const initialState: State = {
     id: null,
     name: "",
     description: "",
+    department: "",
     price: 0,
     type: "",
     table_name: null,

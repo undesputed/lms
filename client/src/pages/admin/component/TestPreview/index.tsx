@@ -6,38 +6,57 @@ import StoolPreviewTable from "../Stool/previewTable";
 import CCFastingPreviewTable from "../CCFasting/previewTable";
 import CTBTPreviewTable from "../CTBT/previewTable";
 import ECGPreviewTable from "../ECG/previewTable";
+import { Grid, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
 interface TestPreviewProps {
-  testType: string;
-  onClose?: () => void;
-  testResult?: ec_care_testResult;
+  patientResult: any
 }
 
 const TestPreview: React.FC<TestPreviewProps> = ({
-  testType,
-  onClose,
-  testResult,
+  patientResult
 }) => {
-  switch (testType) {
-    case "CBC":
-      return <CbcPreviewTable onClose={onClose} testResult={testResult} />;
-    case "Urinalysis":
-      return (
-        <UrinalysisPreviewTable onClose={onClose} testResult={testResult} />
-      );
-    case "Stool Exam":
-      return <StoolPreviewTable onClose={onClose} testResult={testResult} />;
-    case "FBS (Fasting Blood Sugar)":
-      return (
-        <CCFastingPreviewTable onClose={onClose} testResult={testResult} />
-      );
-    case "CTBT":
-      return <CTBTPreviewTable onClose={onClose} testResult={testResult} />;
-    case "ECG":
-      return <ECGPreviewTable onClose={onClose} testResult={testResult} />;
-    default:
-      return <>Hello world</>;
-  }
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">TEST NAME</TableCell>
+              <TableCell align="center">RESULTS</TableCell>
+              <TableCell align="left">UNIT</TableCell>
+            </TableRow>
+          </TableHead>
+          {
+            (function () {
+              let content: any = []
+
+              patientResult.forEach((d) => {
+
+                content.push(
+                  <TableBody sx={{ border: "1px solid #ccc;" }}>
+
+                    <TableRow
+                      key={d.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell align="right" component="th" scope="row">
+                        {d.test_name.toUpperCase()}:
+                      </TableCell>
+                      <TableCell align="center" sx={{ fontWeight: "bold" }}>{d.result ? d.result : '--'}</TableCell>
+                      <TableCell align="left">{d.unit ? d.unit : '--'}</TableCell>
+                    </TableRow>
+                  </TableBody>
+
+                )
+              })
+
+              return content;
+            }())
+          }
+        </Table>
+      </TableContainer>
+    </>
+  )
 };
 
 export default TestPreview;

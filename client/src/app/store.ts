@@ -9,6 +9,7 @@ import UaReducer from "../reducers/ua/uaSlice";
 import TestResultReducer from "../reducers/testResult/testResultSlice";
 import TestFieldReducer from "../reducers/testField/testFieldSlice";
 import TestFieldCategoryReducer from "../reducers/testCategoryField/testCategoryFIeldSlice";
+import ResultsReducer from "../reducers/results/resultsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     testResult: TestResultReducer,
     testField: TestFieldReducer,
     testFieldCategory: TestFieldCategoryReducer,
+    results: ResultsReducer
   },
 });
 

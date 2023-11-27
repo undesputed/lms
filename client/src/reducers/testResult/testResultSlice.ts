@@ -12,6 +12,7 @@ import {
   patientTotalById,
   deleteTestResult,
   testResultById,
+  deleteTestResultByTest,
 } from "../../api/testResultAPI";
 import { RootState } from "../../app/store";
 import { ec_care_testResult } from "../../entity/ec_care_testResult";
@@ -84,6 +85,14 @@ export const deleteResult = createAsyncThunk(
   }
 );
 
+export const deleteResultByTest = createAsyncThunk(
+  "testResult/deleteTestResultByTest",
+  async (id: number | string) => {
+    const response = await deleteTestResultByTest(id);
+    return response;
+  }
+);
+
 const testResultSlice = createSlice({
   name: "patient",
   initialState: initialState,
@@ -135,8 +144,8 @@ export const selectTestResultByPatientId = createSelector(
   (testResult, patient_id) => {
     return testResult.length > 0
       ? testResult.filter(
-          (testResult) => testResult.patient_id.id === patient_id
-        )
+        (testResult) => testResult.patient_id.id === patient_id
+      )
       : {};
   }
 );

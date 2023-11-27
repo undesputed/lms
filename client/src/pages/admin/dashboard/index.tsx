@@ -42,14 +42,14 @@ import {
   selectTestCategoryById,
 } from "../../../reducers/testCategory/testCategory";
 import { ec_care_patient } from "../../../entity/ec_care_patient";
-import { ec_care_test_category } from "../../../entity/ec_care_test_category";
 import { ec_care_tests } from "../../../entity/ec_care_tests";
-import { addTests } from "../../../reducers/tests/testSlice";
 import { addResult } from "../../../reducers/testResult/testResultSlice";
 import { ec_care_testResult } from "../../../entity/ec_care_testResult";
 import { GridCellParams } from "@mui/x-data-grid";
 import UpdatePatientForm from "../component/UpdatePatient";
 import { useNavigate } from "react-router-dom";
+import { getTestByTest } from "../../../reducers/tests/testSlice";
+import { insertResult } from "../../../reducers/results/resultsSlice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -227,10 +227,10 @@ const AdminDashboard = () => {
       const response: any = await appDispatch(addPatient(patient));
 
       if (response.type === "patient/createPatient/fulfilled") {
-        let testData: ec_care_tests[] = [];
         let resultData: ec_care_testResult[] = [];
+        let test_id = [];
 
-        state.addedTests?.map((item) => {
+        state.addedTests?.map((item: any) => {
           const data: any = {
             id: null,
             test_id: item.id,
@@ -240,14 +240,29 @@ const AdminDashboard = () => {
             created_at: formatDateForMySQL(new Date()),
             updated_at: null,
           };
-          testData.push(data);
+          test_id.push(item?.id);
           resultData.push(data);
         });
 
-        if (testData.length > 0) {
-          testData.forEach(async (item, index) => {
-            await appDispatch(addTests(item));
-          });
+        if (test_id.length > 0) {
+          test_id.map(async (d) => {
+            const testResponse: any = await appDispatch(getTestByTest(d));
+
+            if (testResponse.type === "tests/getTestByTest/fulfilled") {
+              testResponse.payload.map(async (item: any) => {
+                const resData: any = {
+                  result: null,
+                  lms_patient_id: response.payload?.id,
+                  lms_test_id: item.id,
+                  testDate: new Date().toDateString().split('T')[0],
+                }
+                await appDispatch(insertResult(resData));
+              })
+            }
+          })
+        }
+
+        if (resultData.length > 0) {
           resultData.forEach(async (item, index) => {
             await appDispatch(addResult(item));
           });
@@ -279,7 +294,6 @@ const AdminDashboard = () => {
   };
 
   const onPreview = () => {
-    console.log(state.patient);
     if (
       state.patient.birthdate === null ||
       state.patient.email === "" ||

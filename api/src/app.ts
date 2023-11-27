@@ -22,6 +22,14 @@ import { testField } from "./routes/testField/testField";
 import { testCategoryField } from "./routes/testFieldCategory/testFieldCategory";
 import { createPatientResult } from "./routes/patientResult/createPatientResult";
 import { createTestFieldCategory } from "./routes/testFieldCategory/createTestFieldCategory";
+import { createTestCategory } from "./routes/testCategory/createTestCategory";
+import { deleteTest } from "./routes/tests/deleteTest";
+import { deleteTestCategory } from "./routes/testCategory/deleteTestCategory";
+import { createResults } from "./routes/results/createResults";
+import { results } from "./routes/results/results";
+import { test } from "./routes/tests/test";
+import { updateResults } from "./routes/results/updateResults";
+import { deleteResults } from "./routes/results/deleteResults";
 
 const app = express();
 var corsOptions = {
@@ -38,6 +46,8 @@ app.use(hmo);
 app.use(testResult);
 app.use(testField);
 app.use(testCategoryField);
+app.use(results);
+app.use(test);
 
 // Create
 app.use(createPatient);
@@ -45,13 +55,19 @@ app.use(createTests);
 app.use(createTestResult);
 app.use(createPatientResult);
 app.use(createTestFieldCategory);
+app.use(createTestCategory);
+app.use(createResults);
 
 // Update
 app.use(updateTestResult);
 app.use(updatePatient);
+app.use(updateResults);
 
 // Delete
 app.use(deleteTestResult);
+app.use(deleteTestCategory);
+app.use(deleteTest);
+app.use(deleteResults);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError("Not Found");

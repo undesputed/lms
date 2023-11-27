@@ -13,7 +13,7 @@ import {
 import { reducer } from "./reducer";
 import { initialState } from "./initialState";
 import { useAppDispatch } from "../../../actions/hooks";
-import { fetchTestCategory } from "../../../reducers/testCategory/testCategory";
+import { fetchTestCategory, removeTestCategory } from "../../../reducers/testCategory/testCategory";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -24,6 +24,9 @@ import EditTestModal from "../component/EditTest";
 import { fetchTestField } from "../../../reducers/testField/testFieldSlice";
 import { BiPlusCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { removeTest } from "../../../reducers/tests/testSlice";
+import { removeResultByTest } from "../../../reducers/results/resultsSlice";
+import { deleteResultByTest } from "../../../reducers/testResult/testResultSlice";
 
 const ManageTest = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -87,8 +90,30 @@ const ManageTest = () => {
     }
   };
 
-  const onClickDelete = (id: GridRowId) => {
-    console.log(state);
+  const onClickDelete = async (id: GridRowId) => {
+    const isConfirmed = window.confirm('Are you sure you want to proceed?');
+
+    if (isConfirmed) {
+      try {
+        const resResult: any = await appDispatch(removeResultByTest(id));
+        if (resResult.type === "results/removeResultByTest/fulfilled") {
+          const testRes: any = await appDispatch(removeTest(id));
+          if (testRes.type === "tests/removeTest/fulfilled") {
+            const deleteTestRes: any = await appDispatch(deleteResultByTest(id));
+            if (deleteTestRes.type === "testResult/deleteTestResultByTest/fulfilled") {
+              const testCatRes: any = await appDispatch(removeTestCategory(id));
+              if (testCatRes.type === "testCategory/removeTestCategory/fulfilled") {
+                window.location.reload();
+              }
+            }
+          }
+        } else {
+          alert("Error Deleting Test")
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   const handleEditSubmit = () => {

@@ -8,7 +8,7 @@ import {
   TableHead,
 } from "@mui/material";
 import React from "react";
-import logo from "../../../../assets/image/logo/Logo.png";
+import logo from "../../../../../assets/image/logo/Logo.png";
 
 const Header = () => {
   return (

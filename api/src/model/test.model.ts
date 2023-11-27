@@ -4,9 +4,7 @@ import { DatabaseQueryError } from "../errors/dbQueryError";
 export default class Test {
   id: number | null;
   test_id: number | null;
-  patient_id: number | null;
   field_id: number | null;
-  result: string | null;
   testDate: Date | string | null;
   status: number;
   created_at: Date | string | null;
@@ -15,9 +13,7 @@ export default class Test {
   constructor(test: {
     id: number | null;
     test_id: number | null;
-    patient_id: number | null;
     field_id: number | null;
-    result: string | null;
     testDate: Date | string | null;
     status: number;
     created_at: Date | string | null;
@@ -25,9 +21,7 @@ export default class Test {
   }) {
     this.id = test.id;
     this.test_id = test.test_id;
-    this.patient_id = test.patient_id;
     this.field_id = test.field_id;
-    this.result = test.result;
     this.testDate = test.testDate;
     this.status = test.status;
     this.created_at = test.created_at;
@@ -64,5 +58,34 @@ export default class Test {
         }
       );
     });
+  }
+
+  static async findByTest(test_id: number | string): Promise<Test | null> {
+    return new Promise((resolve, reject) => {
+      sql.query(
+        `SELECT * FROM lms_test WHERE test_id = ${test_id}`,
+        (err, res: any) => {
+          if (err) {
+            console.log(err);
+            reject(new DatabaseQueryError("Error Retreiving Test"))
+          } else {
+            resolve(res);
+          }
+        }
+      )
+    })
+  }
+
+  static async deleteTest(test_id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      sql.query(`DELETE FROM lms_test WHERE test_id = ${test_id}`, (err, res: any) => {
+        if (err) {
+          console.log(err);
+          reject(new DatabaseQueryError("Error Deleting test"));
+        } else {
+          resolve(res);
+        }
+      })
+    })
   }
 }

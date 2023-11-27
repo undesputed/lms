@@ -17,6 +17,12 @@ import {
   MenuItem,
   Paper,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
@@ -40,11 +46,13 @@ import {
 } from "@mui/x-data-grid";
 import TestFieldComponent from "../../component/TestField";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { addTestCategory } from "../../../../reducers/testCategory/testCategory";
+import { addTests } from "../../../../reducers/tests/testSlice";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   "Basic Information",
   "Test Field Inputs",
-  "Input Fields",
   "Final Step",
 ];
 
@@ -52,6 +60,7 @@ export default function AddTestPage() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [activeStep, setActiveStep] = React.useState(0);
   const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
   const selectAllField = useAppSelector((state: RootState) =>
     selectAllTestField(state)
   );
@@ -85,69 +94,32 @@ export default function AddTestPage() {
     });
   };
 
-  const handleUnitChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.unit = event.target.value;
-  };
-
-  const handleMaleRefChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.maleRefRange = event.target.value;
-  };
-
-  const handleFemaleRefChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.femaleRefRange = event.target.value;
-  };
-
-  const handleRefRangeChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.refRange = event.target.value;
-  };
-
-  const handleDesirableRefChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.desirableRefRange = event.target.value;
-  };
-
-  const handleBorderlineChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.borderlineRefRange = event.target.value;
-  };
-
-  const handleHighRiskChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.highRiskRefRange = event.target.value;
-  };
-
-  const handleOtherChange = (event: any, id: number) => {
-    const findTest = state.testField.find((d) => {
-      d === id;
-    });
-
-    findTest.other = event.target.value;
-  };
+  const onSubmit = async () => {
+    try {
+      const res: any = await appDispatch(addTestCategory(state.testCategory))
+      if (res.type === "testCategory/addTestCategory/fulfilled") {
+        state.selectedFields.forEach(async (d) => {
+          const newTestData = {
+            id: null,
+            test_id: res.payload?.id,
+            field_id: d,
+            testDate: null,
+            status: 0,
+            created_at: null,
+            updated_at: null
+          }
+          const testRes: any = await appDispatch(addTests(newTestData));
+          if (testRes.type === "tests/addTests/fulfilled") {
+            navigate("/admin/dashboard/test");
+          } else {
+            alert("Error encountered while created new Test")
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -234,8 +206,17 @@ export default function AddTestPage() {
                               <AddTestField
                                 dropDown={false}
                                 onChange={onChangeField}
+                                label="DEPARTMENT"
+                                textFieldName="department"
+                              />
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                              <AddTestField
+                                dropDown={false}
+                                onChange={onChangeField}
                                 label="PRICE"
                                 textFieldName="price"
+                                type="number"
                               />
                             </Grid>
                             <Grid item xs={12} md={12}>
@@ -276,57 +257,93 @@ export default function AddTestPage() {
                     case 2:
                       return (
                         <>
-                          {state.selectedFields.map((d) => {
-                            const find = selectAllField.find(
-                              (item) => item.id === d
-                            );
-                            return (
-                              <Accordion
-                                sx={{
-                                  backgroundColor: "rgba(0, 0, 0, .03)",
-                                  border: "1px solid rgba(0, 0, 0, .10)",
-                                }}
-                              >
-                                <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon />}
-                                  aria-controls="panel1a-content"
-                                  id="panel1a-header"
-                                >
-                                  <Typography
-                                    sx={{
-                                      color: "black",
-                                      fontWeight: "bolder",
-                                      fontSize: "18px",
-                                    }}
-                                  >
-                                    {find.test_name.toUpperCase()}
-                                  </Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                  <TestFieldComponent
-                                    handleUnitChange={handleUnitChange}
-                                    handleMaleRefChange={handleMaleRefChange}
-                                    handleFemaleRefChange={
-                                      handleFemaleRefChange
+                          <Box component="form" noValidate sx={{ mt: 3 }}>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} md={6}>
+                                <Typography component="h4" gutterBottom>
+                                  LABORATORY TEST NAME:
+                                </Typography>
+                                <Typography variant="h3" gutterBottom>
+                                  {state.testCategory.name}
+                                </Typography>
+                                <Typography component="h4" gutterBottom>
+                                  DESCRIPTION:
+                                </Typography>
+                                <Typography variant="h4" gutterBottom>
+                                  {state.testCategory.description}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography component="h4" gutterBottom>
+                                  PRICE:
+                                </Typography>
+                                <Typography variant="h4" gutterBottom>
+                                  &#8369;{Number(state.testCategory.price).toFixed(2)}
+                                </Typography>
+                                <Typography component="h4" gutterBottom>
+                                  TYPE:
+                                </Typography>
+                                <Typography variant="h4" gutterBottom>
+                                  {state.testCategory.type}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} md={12}>
+                                <TableContainer component={Paper}>
+                                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell align="center">TEST NAME</TableCell>
+                                        <TableCell align="center">UNIT</TableCell>
+                                        <TableCell align="center">MALE REF. RANGE</TableCell>
+                                        <TableCell align="center">FEMALE REF. RANGE</TableCell>
+                                        <TableCell align="center">REF. RANGE</TableCell>
+                                        <TableCell align="center">DESIRABLE REF. RANGE</TableCell>
+                                        <TableCell align="center">BORDERLINE REF. RANGE</TableCell>
+                                        <TableCell align="center">HIGH RISK REF. RANGE</TableCell>
+                                        <TableCell align="center">OTHER</TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    {
+                                      (function () {
+                                        let content: any = []
+
+                                        state.selectedFields.forEach((d) => {
+                                          const findTest = state.testField.find((item) => item.id === d);
+
+                                          content.push(
+                                            <TableBody>
+
+                                              <TableRow
+                                                key={findTest.id}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                              >
+                                                <TableCell component="th" scope="row">
+                                                  {findTest.test_name}
+                                                </TableCell>
+                                                <TableCell align="center">{findTest.unit ? findTest.unit : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.maleRefRange ? findTest.maleRefRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.femaleRefRange ? findTest.femaleRefRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.refRange ? findTest.refRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.desirableRefRange ? findTest.desirableRefRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.borderlineRefRange ? findTest.borderlineRefRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.highRiskRefRange ? findTest.highRiskRefRange : '--'}</TableCell>
+                                                <TableCell align="center">{findTest.other ? findTest.other : '--'}</TableCell>
+                                              </TableRow>
+                                            </TableBody>
+
+                                          )
+                                        })
+
+                                        return content;
+                                      }())
                                     }
-                                    handleRefRangeChange={handleRefRangeChange}
-                                    handleDesirableRefChange={
-                                      handleDesirableRefChange
-                                    }
-                                    handleBorderlineChange={
-                                      handleBorderlineChange
-                                    }
-                                    handleHighRiskChange={handleHighRiskChange}
-                                    handleOtherChange={handleOtherChange}
-                                  />
-                                </AccordionDetails>
-                              </Accordion>
-                            );
-                          })}
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </Grid >
+                          </Box>
                         </>
                       );
-                    case 3:
-                      return <Typography>Step 3</Typography>;
                   }
                 })()}
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -339,15 +356,24 @@ export default function AddTestPage() {
                     Back
                   </Button> */}
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleNext} variant="outlined">
-                    {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                  </Button>
+                  {
+                    activeStep === steps.length - 1 ?
+                      (
+                        <Button onClick={onSubmit} variant="outlined">
+                          SUBMIT
+                        </Button>
+                      ) : (
+                        <Button onClick={handleNext} variant="outlined">
+                          NEXT
+                        </Button>
+                      )
+                  }
                 </Box>
               </React.Fragment>
             )}
           </Box>
-        </Paper>
-      </Container>
+        </Paper >
+      </Container >
     </>
   );
 }

@@ -9,13 +9,15 @@ interface AddTestFieldProps {
     label?: string;
     textFieldName?: string;
     dropDown?: boolean;
+    type?: string;
 }
 
 const AddTestField: React.FC<AddTestFieldProps> = ({
     onChange,
     label,
     textFieldName,
-    dropDown
+    dropDown,
+    type
 }) => {
     return (
         <><Box
@@ -84,6 +86,7 @@ const AddTestField: React.FC<AddTestFieldProps> = ({
                                 id={textFieldName}
                                 placeholder={label}
                                 onChange={onChange}
+                                type={type ? type : 'text'}
                             />
 
                         )

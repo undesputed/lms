@@ -109,4 +109,7 @@ export const initialState: State = {
   filteredTests: [],
   total: 0,
   testType: "",
+  test_id: 0,
+  patientResult: [],
+  container: []
 };

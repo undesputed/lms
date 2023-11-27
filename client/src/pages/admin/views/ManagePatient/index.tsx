@@ -84,10 +84,9 @@ const columns: GridColDef[] = [
       return !referral
         ? "--"
         : referral
-        ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${
-            referral.middleName || ""
+          ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${referral.middleName || ""
           }`
-        : "";
+          : "";
     },
   },
   {
@@ -187,10 +186,10 @@ const ManagePatient: React.FC<PatientProps> = ({
         columns={columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
+            paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        pageSizeOptions={[5, 10, 20]}
+        pageSizeOptions={[10, 20]}
         onCellClick={onCellClick}
         slots={{ toolbar: GridToolbar }}
         slotProps={{

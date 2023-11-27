@@ -65,5 +65,25 @@ export const reducer = (state: State, action: Action) => {
         ...state,
         result: action.payload,
       };
+    case "setTestId":
+      return {
+        ...state,
+        test_id: action.payload,
+      };
+    case "setPatientResult":
+      return {
+        ...state,
+        patientResult: action.payload,
+      };
+    case "setContainer":
+      return {
+        ...state,
+        container: [...state.container, action.payload]
+      };
+    case "setContainerEmpty":
+      return {
+        ...state,
+        container: action.payload
+      };
   }
 };

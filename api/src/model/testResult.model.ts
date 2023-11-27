@@ -303,6 +303,22 @@ export default class TestResult {
     });
   }
 
+  static async deleteByTestId(test_id: number | string): Promise<any | null> {
+    return new Promise((resolve, reject) => {
+      sql.query(
+        `DELETE FROM lms_test_results WHERE test_id = ${test_id}`,
+        (err, res: any) => {
+          if (err) {
+            console.log(err);
+            reject(new DatabaseQueryError("Error Deleting Test Result"));
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
+
   static async findBydId(id: number | string): Promise<TestResult | null> {
     return new Promise((resolve, reject) => {
       sql.query(

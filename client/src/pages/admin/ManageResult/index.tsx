@@ -51,6 +51,24 @@ import LabResultModal from "../component/Result";
 import AddNewTest from "../component/AddTest";
 import { ec_care_test_category } from "../../../entity/ec_care_test_category";
 import TestPreview from "../component/TestPreview";
+import { fetchResultByTestField, insertResult, modifyResult, removeResult } from "../../../reducers/results/resultsSlice";
+import EditTestModal from "../component/EditResultModal";
+import { getTestByTest } from "../../../reducers/tests/testSlice";
+
+const debounce = <F extends (...args: any[]) => any>(
+  func: F,
+  delay: number
+) => {
+  let timeoutId: NodeJS.Timeout;
+
+  return (...args: Parameters<F>): void => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
 
 const ManageResult = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -140,19 +158,30 @@ const ManageResult = () => {
       });
   };
 
-  const onChangeTestField = (event: any) => {
-    const { name, value } = event.target;
-    dispatch({
-      type: "setResultOnChange",
-      name: name,
-      value: value,
-    });
-  };
+  const handleChange = debounce((id: number, event: any) => {
+    const { value, name } = event.target;
+    const findField = state.patientResult.find((d) => d.patient_results_id === id);
+    findField.result = value;
+    const find = state.container.find((d) => d.id === id);
+    if (find) {
+      return;
+    }
+    const result = {
+      result: value,
+      id: id
+    }
+
+    state.container.push(result);
+  }, 500);
+
+  const handleFieldChange = (id: number, event: any) => {
+    handleChange(id, event);
+  }
   // End Handle on Change
 
   // Start of Submit Functions
   const onTestSubmit = () => {
-    window.open("/admin/dashboard/print", "_blank");
+    window.open(`/admin/dashboard/print?id=${id}`, "_blank");
   };
 
   const onAddTest = () => {
@@ -170,19 +199,23 @@ const ManageResult = () => {
     onOpenTestModal();
   };
 
-  const onClickEdit = async (id: GridRowId, name: string) => {
+  const onClickEdit = async (rowId: GridRowId, name: string, test_id: number) => {
     dispatch({
       type: "setTestType",
       payload: name,
     });
 
     try {
-      const response = await appDispatch(fetchResultById(id));
-      if (response.type === "testResult/fetchTestResultById/fulfilled") {
+      const params = {
+        test_id: test_id,
+        patient_id: id
+      }
+      const response = await appDispatch(fetchResultByTestField(params));
+      if (response.type === "results/fetchResultsByTestField/fulfilled") {
         dispatch({
-          type: "setResult",
-          payload: response.payload,
-        });
+          type: "setPatientResult",
+          payload: response.payload
+        })
       }
     } catch (err) {
       console.log(err);
@@ -190,13 +223,17 @@ const ManageResult = () => {
     onOpenEditModal();
   };
 
-  const onClickDelete = async (id: GridRowId) => {
+  const onClickDelete = async (rowId: GridRowId, test_id: number | string) => {
     const result = window.confirm("Are you sure you want to proceed?");
     if (result) {
       try {
-        const deleteRes = await appDispatch(deleteResult(id));
-
-        if (deleteRes.type === "testResult/deleteTestResult/fulfilled") {
+        const params = {
+          test_id: test_id,
+          patient_id: id
+        }
+        const deleteRes = await appDispatch(deleteResult(rowId));
+        const response = await appDispatch(removeResult(params));
+        if (deleteRes.type === "testResult/deleteTestResult/fulfilled" && response.type === "results/removeResult/fulfilled") {
           retrieveTestResult();
         }
       } catch (err) {
@@ -205,18 +242,23 @@ const ManageResult = () => {
     }
   };
 
-  const onClickPreview = async (id: GridRowId, name: string) => {
+  const onClickPreview = async (rowId: GridRowId, name: string, test_id: number | string) => {
     dispatch({
       type: "setTestType",
       payload: name,
     });
     try {
-      const response = await appDispatch(fetchResultById(id));
-      if (response.type === "testResult/fetchTestResultById/fulfilled") {
+      const params = {
+        test_id: test_id,
+        patient_id: id
+      }
+      const response = await appDispatch(fetchResultByTestField(params));
+      console.log(response);
+      if (response.type === "results/fetchResultsByTestField/fulfilled") {
         dispatch({
-          type: "setResult",
-          payload: response.payload,
-        });
+          type: "setPatientResult",
+          payload: response.payload
+        })
         openPreviewModal();
       }
     } catch (err) {
@@ -224,12 +266,29 @@ const ManageResult = () => {
     }
   };
 
-  const handleEditSubmit = () => {};
-  const submit = () => {};
+  const handleEditSubmit = () => {
+    try {
+      state.container.map(async (d) => {
+        const response = await appDispatch(modifyResult(d))
+        if (response.type === "results/modifyResult/fulfilled") {
+          dispatch({
+            type: "setContainerEmpty",
+            payload: []
+          })
+          onOpenEditModal();
+        }
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const submit = () => { };
 
   const handleAddSubmit = async () => {
     try {
       let resultData: ec_care_testResult[] = [];
+      let test_id = [];
+
       state.addedTests?.map((item) => {
         const data: any = {
           id: null,
@@ -240,8 +299,27 @@ const ManageResult = () => {
           created_at: formatDateForMySQL(new Date()),
           updated_at: null,
         };
+        test_id.push(item?.id);
         resultData.push(data);
       });
+
+      if (test_id.length > 0) {
+        test_id.map(async (d) => {
+          const testResponse: any = await appDispatch(getTestByTest(d));
+
+          if (testResponse.type === "tests/getTestByTest/fulfilled") {
+            testResponse.payload.map(async (item: any) => {
+              const resData: any = {
+                result: null,
+                lms_patient_id: id,
+                lms_test_id: item.id,
+                testDate: new Date().toDateString().split('T')[0],
+              }
+              await appDispatch(insertResult(resData));
+            })
+          }
+        })
+      }
 
       if (resultData.length > 0) {
         resultData.forEach(async (item, index) => {
@@ -326,20 +404,20 @@ const ManageResult = () => {
             icon={<PreviewIcon />}
             label="Preview"
             className="textPrimary"
-            onClick={() => onClickPreview(id, row.test_id.name)}
+            onClick={() => onClickPreview(id, row.test_id.name, row.test_id.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={() => onClickEdit(id, row.test_id.name)}
+            onClick={() => onClickEdit(id, row.test_id.name, row.test_id.id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => onClickDelete(id)}
+            onClick={() => onClickDelete(id, row.test_id.id)}
             color="inherit"
           />,
         ];
@@ -387,15 +465,9 @@ const ManageResult = () => {
             handleClose={onOpenEditModal}
             title={`${state.testType} RESULT FIELDS`}
             handleSubmit={handleEditSubmit}
-            showButton={false}
+            showButton={true}
           >
-            <LabResultModal
-              testType={state.testType}
-              onClose={onOpenEditModal}
-              testResult={state.result}
-              onChange={onChangeTestField}
-              onSubmit={handleEditModalSubmit}
-            />
+            <EditTestModal patientResult={state.patientResult} handleFieldChange={handleFieldChange} />
           </ModalComponent>
           <ModalComponent
             open={state.addTestModal}
@@ -407,6 +479,7 @@ const ManageResult = () => {
             <AddNewTest
               onChecked={onAddTestOnChange}
               onSubmit={handleAddSubmit}
+              onCancel={onOpenTestModal}
               testCategory={state.filteredTests}
               testResult={state.testResult}
               patient_id={id}
@@ -420,9 +493,7 @@ const ManageResult = () => {
             showButton={false}
           >
             <TestPreview
-              testType={state.testType}
-              onClose={openPreviewModal}
-              testResult={state.result}
+              patientResult={state.patientResult}
             />
           </ModalComponent>
         </Box>

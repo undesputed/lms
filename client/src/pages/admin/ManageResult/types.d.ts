@@ -14,6 +14,9 @@ export type State = {
   filteredTests: ec_care_test_category[];
   total: number;
   testType: string;
+  test_id: number;
+  patientResult: any[];
+  container: any[];
 };
 
 export type Action =
@@ -28,4 +31,8 @@ export type Action =
   | { type: "setFilteredTests"; payload: any }
   | { type: "setTotal"; payload: number }
   | { type: "setTestType"; payload: string }
-  | { type: "setTestResult"; payload: any };
+  | { type: "setTestResult"; payload: any }
+  | { type: "setTestId"; payload: any }
+  | { type: "setPatientResult"; payload: any }
+  | { type: "setContainer"; payload: any }
+  | { type: "setContainerEmpty"; payload: any };

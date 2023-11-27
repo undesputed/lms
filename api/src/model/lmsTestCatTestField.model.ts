@@ -1,5 +1,6 @@
 import sql from "../db/db";
 import { DatabaseQueryError } from "../errors/dbQueryError";
+import Patient from "./patient.model";
 import Test from "./test.model";
 import TestCategory from "./testCategory.model";
 

@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { createTest, tests } from "../../api/testAPI";
+import { createTest, deleteTest, findTestByTest, tests } from "../../api/testAPI";
 import { RootState } from "../../app/store";
 import { ec_care_tests } from "../../entity/ec_care_tests";
 
@@ -19,6 +19,12 @@ export const fetchTests = createAsyncThunk("tests/fetchTests", async () => {
   return response;
 });
 
+export const getTestByTest = createAsyncThunk("tests/getTestByTest",
+  async (test_id: number | string) => {
+    const response = await findTestByTest(test_id);
+    return response;
+  })
+
 export const addTests = createAsyncThunk(
   "tests/addTests",
   async (tests: ec_care_tests) => {
@@ -26,6 +32,14 @@ export const addTests = createAsyncThunk(
     return response;
   }
 );
+
+export const removeTest = createAsyncThunk(
+  "tests/removeTest",
+  async (test_id: number | string) => {
+    const response = await deleteTest(test_id);
+    return response;
+  }
+)
 
 const patientSlice = createSlice({
   name: "patient",

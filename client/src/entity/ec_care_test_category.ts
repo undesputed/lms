@@ -2,6 +2,7 @@ export class ec_care_test_category {
   id: number | null;
   name: string;
   description: string;
+  department: string | null;
   price: number;
   type: string;
   table_name: string | null;
@@ -13,6 +14,7 @@ export class ec_care_test_category {
     this.id = testCategory.id;
     this.name = testCategory.name;
     this.description = testCategory.description;
+    this.department = testCategory.department;
     this.price = testCategory.price;
     this.type = testCategory.type;
     this.table_name = testCategory.table_name;

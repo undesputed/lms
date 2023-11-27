@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { testCategory } from "../../api/testCategoryAPI";
+import { createCategory, deleteTestCategory, testCategory, testCategoryById } from "../../api/testCategoryAPI";
 import { RootState } from "../../app/store";
 import { ec_care_test_category } from "../../entity/ec_care_test_category";
 
@@ -22,6 +22,30 @@ export const fetchTestCategory = createAsyncThunk(
   }
 );
 
+export const fetchTestCatById = createAsyncThunk(
+  "testCategory/fetchTextCatById",
+  async (id: number | string) => {
+    const response = await testCategoryById(id);
+    return response;
+  }
+)
+
+export const addTestCategory = createAsyncThunk(
+  "testCategory/addTestCategory",
+  async (testCategory: ec_care_test_category) => {
+    const response = await createCategory(testCategory);
+    return response
+  }
+)
+
+export const removeTestCategory = createAsyncThunk(
+  "testCategory/removeTestCategory",
+  async (id: number | string) => {
+    const response = await deleteTestCategory(id);
+    return response;
+  }
+)
+
 const testCategorySlice = createSlice({
   name: "referral",
   initialState: initialState,
@@ -38,7 +62,19 @@ const testCategorySlice = createSlice({
       .addCase(fetchTestCategory.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(addTestCategory.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(addTestCategory.fulfilled, (state, action: any) => {
+        state.status = "succeeded";
+        testCategoryAdapter.addOne(state, action.payload);
+      })
+      .addCase(addTestCategory.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
+
   },
 });
 

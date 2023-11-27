@@ -6,25 +6,19 @@ const router = express.Router();
 router.post("/api/test", async (req: Request, res: Response) => {
   const {
     test_id,
-    patient_id,
     field_id,
-    result,
     testDate,
-    status,
-    created_at,
-    updated_at,
+    status
   } = req.body;
 
   const newTest = new Test({
     id: null,
     test_id,
-    patient_id,
     field_id,
-    result,
     testDate,
     status,
-    created_at,
-    updated_at,
+    created_at: new Date(),
+    updated_at: null,
   });
 
   try {

@@ -5,6 +5,7 @@ export default class TestCategory {
   id: number | null;
   name: number;
   description: string;
+  department: string | null;
   price: number;
   type: string;
   table_name: string;
@@ -16,6 +17,7 @@ export default class TestCategory {
     id: number | null;
     name: number;
     description: string;
+    department: string | null;
     price: number;
     type: string;
     table_name: string;
@@ -26,6 +28,7 @@ export default class TestCategory {
     this.id = testCategory.id;
     this.name = testCategory.name;
     this.description = testCategory.description;
+    this.department = testCategory.department;
     this.price = testCategory.price;
     this.type = testCategory.type;
     this.table_name = testCategory.table_name;
@@ -41,9 +44,10 @@ export default class TestCategory {
 
       sql.query(query, [newTestCategory], (err, res: any) => {
         if (err) {
+          console.log(err);
           reject(new DatabaseQueryError("Error Creating new tests"));
         } else {
-          resolve(res.length ? res[0] : null);
+          resolve(res);
         }
       });
     });
@@ -63,6 +67,21 @@ export default class TestCategory {
     });
   }
 
+  static async findById(id: number | string): Promise<TestCategory | null> {
+    return new Promise((resolve, reject) => {
+      sql.query(
+        `SELECT * FROM lms_test_category WHERE id = ${id}`,
+        (err, res: any) => {
+          if (err) {
+            reject(new DatabaseQueryError("Error Retrieving Test"));
+          } else {
+            resolve(res.length ? res[0] : null);
+          }
+        }
+      );
+    });
+  }
+
   static async findByPatient(patient_id: number): Promise<TestCategory | null> {
     return new Promise((resolve, reject) => {
       sql.query(
@@ -76,5 +95,21 @@ export default class TestCategory {
         }
       );
     });
+  }
+
+  static async deleteTestCategoryById(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      sql.query(
+        `DELETE FROM lms_test_category WHERE id = ${id}`,
+        (err, res: any) => {
+          if (err) {
+            console.log(err);
+            reject(new DatabaseQueryError("Error Deleting Test Category"))
+          } else {
+            resolve(res);
+          }
+        }
+      )
+    })
   }
 }
