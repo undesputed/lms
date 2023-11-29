@@ -33,7 +33,7 @@ import { deleteResults } from "./routes/results/deleteResults";
 
 const app = express();
 var corsOptions = {
-  origin: ["http://localhost:3000", "http://18.141.160.31"],
+  origin: ["http://localhost:3000", "http://13.229.122.211"],
 };
 app.use(json());
 app.use(cors(corsOptions));
