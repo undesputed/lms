@@ -85,6 +85,7 @@ export default class Patient {
         `SELECT * FROM lms_patient WHERE status = 0 ORDER BY id DESC`,
         (err, res: any) => {
           if (err) {
+            console.log(err);
             reject(new DatabaseQueryError("Error Retrieving Data"));
           } else {
             resolve(res);
