@@ -19,9 +19,16 @@ import CBCPrint from "./CBC";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../actions/hooks";
 import { id } from "date-fns/locale";
-import { fetchPatient, selectPatientById } from "../../../../reducers/patient/patientSlice";
+import {
+  fetchPatient,
+  selectPatientById,
+} from "../../../../reducers/patient/patientSlice";
 import { fetchTestCategory } from "../../../../reducers/testCategory/testCategory";
-import { fetchResult, fetchResultByPatient, fetchTotalResultByPatient } from "../../../../reducers/testResult/testResultSlice";
+import {
+  fetchResult,
+  fetchResultByPatient,
+  fetchTotalResultByPatient,
+} from "../../../../reducers/testResult/testResultSlice";
 import { RootState } from "../../../../app/store";
 import { reducer } from "./reducer";
 import { initialState } from "./initialState";
@@ -34,10 +41,10 @@ const TablePreview = () => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const patient_id = searchParams.get("id");
+  const medTechId = searchParams.get("medTech");
   const patient = useAppSelector((state: RootState) =>
     selectPatientById(state, patient_id)
   );
-
   const retrieveTestResult = async () => {
     try {
       await appDispatch(fetchPatient());
@@ -50,26 +57,23 @@ const TablePreview = () => {
       if (result.type === "testResult/fetchTestResultsByPatient/fulfilled") {
         dispatch({
           type: "setTestResult",
-          payload: result.payload
-        })
+          payload: result.payload,
+        });
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const onTest = () => {
-    console.log(state);
-  }
-
   React.useEffect(() => {
     if (!patient_id) {
       navigate("/admin/dashboard");
     }
     retrieveTestResult();
-  }, [])
+  }, []);
 
   React.useEffect(() => {
+    console.log(medTechId);
     if (patient) {
       dispatch({
         type: "setPatient",
@@ -83,35 +87,36 @@ const TablePreview = () => {
         <title>Print Result</title>
       </Helmet>
       <Stack>
-        {
-          state.testResult.map((d) => {
-            return (
-              <Paper
-                sx={{
-                  p: { xs: 2, md: 3 },
-                  height: "1024px",
-                  width: "816px",
-                  display: "flex",
-                  flexDirection: "column"
-                }}
+        {state.testResult.map((d) => {
+          return (
+            <Paper
+              sx={{
+                p: { xs: 2, md: 3 },
+                height: "1024px",
+                width: "816px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Box>
+                <Header />
+                <PatientHeader patient={state.patient} />
+              </Box>
+
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
               >
-                <Box>
-                  <Header />
-                  <PatientHeader patient={state.patient} />
-                </Box>
+                <TestContent test_id={d.test_id} patient_id={patient_id} />
+              </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                  <TestContent test_id={d.test_id} patient_id={patient_id} />
-                </Box>
-
-                <Box sx={{ marginTop: "auto" }}>
-                  <FooterResult />
-                </Box>
-              </Paper>
-            )
-          }
-          )
-        }
+              <Box sx={{ marginTop: "auto" }}>
+                <FooterResult medTech={medTechId} />
+              </Box>
+            </Paper>
+          );
+        })}
       </Stack>
     </Box>
   );

@@ -254,12 +254,12 @@ const AdminDashboard = () => {
                   result: null,
                   lms_patient_id: response.payload?.id,
                   lms_test_id: item.id,
-                  testDate: new Date().toDateString().split('T')[0],
-                }
+                  testDate: new Date().toDateString().split("T")[0],
+                };
                 await appDispatch(insertResult(resData));
-              })
+              });
             }
-          })
+          });
         }
 
         if (resultData.length > 0) {
@@ -268,6 +268,10 @@ const AdminDashboard = () => {
           });
           retrievePatient();
           handleModal();
+          dispatch({
+            type: "setPatients",
+            payload: [],
+          });
           dispatch({
             type: "setValue",
             payload: 1,
@@ -446,37 +450,6 @@ const AdminDashboard = () => {
                   fontSize: "18px",
                 }}
               />
-              <Tab
-                label="Manage Doctor"
-                {...a11yProps(2)}
-                sx={{
-                  backgroundColor:
-                    state.value === 2 ? "#3695D1" : "transparent",
-                  fontWeight: "bolder",
-                  fontSize: "18px",
-                }}
-              />
-              <Tab
-                label="Manage Test"
-                {...a11yProps(3)}
-                sx={{
-                  backgroundColor:
-                    state.value === 3 ? "#3695D1" : "transparent",
-                  fontWeight: "bolder",
-                  fontSize: "18px",
-                }}
-              />
-              <Tab
-                label="Manage Test"
-                {...a11yProps(4)}
-                sx={{
-                  backgroundColor:
-                    state.value === 4 ? "#3695D1" : "transparent",
-                  fontWeight: "bolder",
-                  fontSize: "18px",
-                }}
-                disabled
-              />
             </Tabs>
           </Box>
           <CustomTabPanel value={state.value} index={0}>
@@ -501,15 +474,6 @@ const AdminDashboard = () => {
               onSelectPatient={onSelectPatient}
               onEditPatient={onEditPatient}
             />
-          </CustomTabPanel>
-          <CustomTabPanel value={state.value} index={2}>
-            <ManageDoctor />
-          </CustomTabPanel>
-          <CustomTabPanel value={state.value} index={3}>
-            Manage Test
-          </CustomTabPanel>
-          <CustomTabPanel value={state.value} index={4}>
-            Patient Test Details
           </CustomTabPanel>
         </Box>
         <Footer />

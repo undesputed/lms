@@ -111,5 +111,7 @@ export const initialState: State = {
   testType: "",
   test_id: 0,
   patientResult: [],
-  container: []
+  container: [],
+  medTech: "",
+  medTechId: 1,
 };

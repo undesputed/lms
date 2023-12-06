@@ -6,6 +6,10 @@ import {
   Grid,
   IconButton,
   Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import React, { useReducer } from "react";
 import { Helmet } from "react-helmet-async";
@@ -51,7 +55,12 @@ import LabResultModal from "../component/Result";
 import AddNewTest from "../component/AddTest";
 import { ec_care_test_category } from "../../../entity/ec_care_test_category";
 import TestPreview from "../component/TestPreview";
-import { fetchResultByTestField, insertResult, modifyResult, removeResult } from "../../../reducers/results/resultsSlice";
+import {
+  fetchResultByTestField,
+  insertResult,
+  modifyResult,
+  removeResult,
+} from "../../../reducers/results/resultsSlice";
 import EditTestModal from "../component/EditResultModal";
 import { getTestByTest } from "../../../reducers/tests/testSlice";
 
@@ -82,6 +91,24 @@ const ManageResult = () => {
   const testCategory = useAppSelector((state: RootState) =>
     selectAllTestCategory(state)
   );
+
+  const medTechData = [
+    {
+      id: 1,
+      name: "ROCHELLE REUBEN C. VALLECERA, RMT, MLS (ASCPi)",
+      licence: "0108908",
+    },
+    {
+      id: 2,
+      name: "EMMANUEL B. GARCES, RMT",
+      licence: "0099087",
+    },
+    {
+      id: 3,
+      name: "MARITES DE LOS CIENTOS, RMT",
+      licence: "0028407",
+    },
+  ];
 
   function formatDateForMySQL(date) {
     const year = date.getFullYear();
@@ -160,7 +187,9 @@ const ManageResult = () => {
 
   const handleChange = debounce((id: number, event: any) => {
     const { value, name } = event.target;
-    const findField = state.patientResult.find((d) => d.patient_results_id === id);
+    const findField = state.patientResult.find(
+      (d) => d.patient_results_id === id
+    );
     findField.result = value;
     const find = state.container.find((d) => d.id === id);
     if (find) {
@@ -168,20 +197,23 @@ const ManageResult = () => {
     }
     const result = {
       result: value,
-      id: id
-    }
+      id: id,
+    };
 
     state.container.push(result);
   }, 500);
 
   const handleFieldChange = (id: number, event: any) => {
     handleChange(id, event);
-  }
+  };
   // End Handle on Change
 
   // Start of Submit Functions
   const onTestSubmit = () => {
-    window.open(`/admin/dashboard/print?id=${id}`, "_blank");
+    window.open(
+      `/admin/dashboard/print?id=${id}&medTech=${state.medTechId}`,
+      "_blank"
+    );
   };
 
   const onAddTest = () => {
@@ -199,7 +231,11 @@ const ManageResult = () => {
     onOpenTestModal();
   };
 
-  const onClickEdit = async (rowId: GridRowId, name: string, test_id: number) => {
+  const onClickEdit = async (
+    rowId: GridRowId,
+    name: string,
+    test_id: number
+  ) => {
     dispatch({
       type: "setTestType",
       payload: name,
@@ -208,14 +244,14 @@ const ManageResult = () => {
     try {
       const params = {
         test_id: test_id,
-        patient_id: id
-      }
+        patient_id: id,
+      };
       const response = await appDispatch(fetchResultByTestField(params));
       if (response.type === "results/fetchResultsByTestField/fulfilled") {
         dispatch({
           type: "setPatientResult",
-          payload: response.payload
-        })
+          payload: response.payload,
+        });
       }
     } catch (err) {
       console.log(err);
@@ -229,11 +265,14 @@ const ManageResult = () => {
       try {
         const params = {
           test_id: test_id,
-          patient_id: id
-        }
+          patient_id: id,
+        };
         const deleteRes = await appDispatch(deleteResult(rowId));
         const response = await appDispatch(removeResult(params));
-        if (deleteRes.type === "testResult/deleteTestResult/fulfilled" && response.type === "results/removeResult/fulfilled") {
+        if (
+          deleteRes.type === "testResult/deleteTestResult/fulfilled" &&
+          response.type === "results/removeResult/fulfilled"
+        ) {
           retrieveTestResult();
         }
       } catch (err) {
@@ -242,7 +281,11 @@ const ManageResult = () => {
     }
   };
 
-  const onClickPreview = async (rowId: GridRowId, name: string, test_id: number | string) => {
+  const onClickPreview = async (
+    rowId: GridRowId,
+    name: string,
+    test_id: number | string
+  ) => {
     dispatch({
       type: "setTestType",
       payload: name,
@@ -250,15 +293,15 @@ const ManageResult = () => {
     try {
       const params = {
         test_id: test_id,
-        patient_id: id
-      }
+        patient_id: id,
+      };
       const response = await appDispatch(fetchResultByTestField(params));
       console.log(response);
       if (response.type === "results/fetchResultsByTestField/fulfilled") {
         dispatch({
           type: "setPatientResult",
-          payload: response.payload
-        })
+          payload: response.payload,
+        });
         openPreviewModal();
       }
     } catch (err) {
@@ -269,20 +312,20 @@ const ManageResult = () => {
   const handleEditSubmit = () => {
     try {
       state.container.map(async (d) => {
-        const response = await appDispatch(modifyResult(d))
+        const response = await appDispatch(modifyResult(d));
         if (response.type === "results/modifyResult/fulfilled") {
           dispatch({
             type: "setContainerEmpty",
-            payload: []
-          })
+            payload: [],
+          });
           onOpenEditModal();
         }
-      })
+      });
     } catch (err) {
       console.log(err);
     }
   };
-  const submit = () => { };
+  const submit = () => {};
 
   const handleAddSubmit = async () => {
     try {
@@ -313,12 +356,12 @@ const ManageResult = () => {
                 result: null,
                 lms_patient_id: id,
                 lms_test_id: item.id,
-                testDate: new Date().toDateString().split('T')[0],
-              }
+                testDate: new Date().toDateString().split("T")[0],
+              };
               await appDispatch(insertResult(resData));
-            })
+            });
           }
-        })
+        });
       }
 
       if (resultData.length > 0) {
@@ -467,7 +510,10 @@ const ManageResult = () => {
             handleSubmit={handleEditSubmit}
             showButton={true}
           >
-            <EditTestModal patientResult={state.patientResult} handleFieldChange={handleFieldChange} />
+            <EditTestModal
+              patientResult={state.patientResult}
+              handleFieldChange={handleFieldChange}
+            />
           </ModalComponent>
           <ModalComponent
             open={state.addTestModal}
@@ -492,9 +538,7 @@ const ManageResult = () => {
             handleSubmit={submit}
             showButton={false}
           >
-            <TestPreview
-              patientResult={state.patientResult}
-            />
+            <TestPreview patientResult={state.patientResult} />
           </ModalComponent>
         </Box>
         <Paper sx={{ p: { xs: 2, md: 3 } }}>
@@ -576,6 +620,43 @@ const ManageResult = () => {
                   <IconButton aria-label="right" onClick={onTestSubmit}>
                     <BiPrinter size={30} />
                   </IconButton>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Box
+                  border={1}
+                  sx={{ width: "100%", borderColor: "#0d7f3f" }}
+                  display={"flex"}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                  height={50}
+                  justifyContent={"left"}
+                >
+                  <Typography component="h4" variant="h4" paddingX={1}>
+                    Medical Technologists:
+                  </Typography>
+                  <Typography
+                    component="h4"
+                    variant="h4"
+                    paddingX={1}
+                    sx={{ fontWeight: 400 }}
+                  >
+                    <Select
+                      value={state.medTechId}
+                      onChange={(e) => {
+                        dispatch({
+                          type: "setMedTechId",
+                          payload: e.target.value,
+                        });
+                      }}
+                    >
+                      {medTechData.map((d, index) => (
+                        <MenuItem key={index} value={d.id}>
+                          {d.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Typography>
                 </Box>
               </Grid>
             </Grid>

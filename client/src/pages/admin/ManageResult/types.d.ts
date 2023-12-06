@@ -17,6 +17,8 @@ export type State = {
   test_id: number;
   patientResult: any[];
   container: any[];
+  medTech: string;
+  medTechId: number;
 };
 
 export type Action =
@@ -35,4 +37,6 @@ export type Action =
   | { type: "setTestId"; payload: any }
   | { type: "setPatientResult"; payload: any }
   | { type: "setContainer"; payload: any }
-  | { type: "setContainerEmpty"; payload: any };
+  | { type: "setContainerEmpty"; payload: any }
+  | { type: "setMedTech"; payload: string | number }
+  | { type: "setMedTechId"; payload: any };

@@ -49,12 +49,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { addTestCategory } from "../../../../reducers/testCategory/testCategory";
 import { addTests } from "../../../../reducers/tests/testSlice";
 import { useNavigate } from "react-router-dom";
+import { ec_care_tests } from "../../../../entity/ec_care_tests";
 
-const steps = [
-  "Basic Information",
-  "Test Field Inputs",
-  "Final Step",
-];
+const steps = ["Basic Information", "Test Field Inputs", "Final Step"];
 
 export default function AddTestPage() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -96,30 +93,31 @@ export default function AddTestPage() {
 
   const onSubmit = async () => {
     try {
-      const res: any = await appDispatch(addTestCategory(state.testCategory))
+      const res: any = await appDispatch(addTestCategory(state.testCategory));
       if (res.type === "testCategory/addTestCategory/fulfilled") {
-        state.selectedFields.forEach(async (d) => {
+        state.selectedFields.forEach(async (d, index) => {
           const newTestData = {
             id: null,
             test_id: res.payload?.id,
             field_id: d,
             testDate: null,
+            orderNum: index + 1,
             status: 0,
             created_at: null,
-            updated_at: null
-          }
+            updated_at: null,
+          };
           const testRes: any = await appDispatch(addTests(newTestData));
           if (testRes.type === "tests/addTests/fulfilled") {
             navigate("/admin/dashboard/test");
           } else {
-            alert("Error encountered while created new Test")
+            alert("Error encountered while created new Test");
           }
-        })
+        });
       }
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -206,14 +204,6 @@ export default function AddTestPage() {
                               <AddTestField
                                 dropDown={false}
                                 onChange={onChangeField}
-                                label="DEPARTMENT"
-                                textFieldName="department"
-                              />
-                            </Grid>
-                            <Grid item xs={12} md={12}>
-                              <AddTestField
-                                dropDown={false}
-                                onChange={onChangeField}
                                 label="PRICE"
                                 textFieldName="price"
                                 type="number"
@@ -223,7 +213,7 @@ export default function AddTestPage() {
                               <AddTestField
                                 dropDown={true}
                                 onChange={onChangeField}
-                                label="TYPE"
+                                label="DEPARTMENT"
                                 textFieldName="type"
                               />
                             </Grid>
@@ -278,10 +268,11 @@ export default function AddTestPage() {
                                   PRICE:
                                 </Typography>
                                 <Typography variant="h4" gutterBottom>
-                                  &#8369;{Number(state.testCategory.price).toFixed(2)}
+                                  &#8369;
+                                  {Number(state.testCategory.price).toFixed(2)}
                                 </Typography>
                                 <Typography component="h4" gutterBottom>
-                                  TYPE:
+                                  DEPARTMENT:
                                 </Typography>
                                 <Typography variant="h4" gutterBottom>
                                   {state.testCategory.type}
@@ -289,58 +280,116 @@ export default function AddTestPage() {
                               </Grid>
                               <Grid item xs={12} md={12}>
                                 <TableContainer component={Paper}>
-                                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
                                     <TableHead>
                                       <TableRow>
-                                        <TableCell align="center">TEST NAME</TableCell>
-                                        <TableCell align="center">UNIT</TableCell>
-                                        <TableCell align="center">MALE REF. RANGE</TableCell>
-                                        <TableCell align="center">FEMALE REF. RANGE</TableCell>
-                                        <TableCell align="center">REF. RANGE</TableCell>
-                                        <TableCell align="center">DESIRABLE REF. RANGE</TableCell>
-                                        <TableCell align="center">BORDERLINE REF. RANGE</TableCell>
-                                        <TableCell align="center">HIGH RISK REF. RANGE</TableCell>
-                                        <TableCell align="center">OTHER</TableCell>
+                                        <TableCell align="center">
+                                          TEST NAME
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          UNIT
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          MALE REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          FEMALE REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          DESIRABLE REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          BORDERLINE REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          HIGH RISK REF. RANGE
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          OTHER
+                                        </TableCell>
                                       </TableRow>
                                     </TableHead>
-                                    {
-                                      (function () {
-                                        let content: any = []
+                                    {(function () {
+                                      let content: any = [];
 
-                                        state.selectedFields.forEach((d) => {
-                                          const findTest = state.testField.find((item) => item.id === d);
+                                      state.selectedFields.forEach((d) => {
+                                        const findTest: any =
+                                          state.testField.find(
+                                            (item) => item.id === d
+                                          );
 
-                                          content.push(
-                                            <TableBody>
-
-                                              <TableRow
-                                                key={findTest.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        content.push(
+                                          <TableBody>
+                                            <TableRow
+                                              key={findTest.id}
+                                              sx={{
+                                                "&:last-child td, &:last-child th":
+                                                  { border: 0 },
+                                              }}
+                                            >
+                                              <TableCell
+                                                component="th"
+                                                scope="row"
                                               >
-                                                <TableCell component="th" scope="row">
-                                                  {findTest.test_name}
-                                                </TableCell>
-                                                <TableCell align="center">{findTest.unit ? findTest.unit : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.maleRefRange ? findTest.maleRefRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.femaleRefRange ? findTest.femaleRefRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.refRange ? findTest.refRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.desirableRefRange ? findTest.desirableRefRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.borderlineRefRange ? findTest.borderlineRefRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.highRiskRefRange ? findTest.highRiskRefRange : '--'}</TableCell>
-                                                <TableCell align="center">{findTest.other ? findTest.other : '--'}</TableCell>
-                                              </TableRow>
-                                            </TableBody>
+                                                {findTest.test_name?.toUpperCase()}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.unit
+                                                  ? findTest.unit
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.maleRefRange
+                                                  ? findTest.maleRefRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.femaleRefRange
+                                                  ? findTest.femaleRefRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.refRange
+                                                  ? findTest.refRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.desirableRefRange
+                                                  ? findTest.desirableRefRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.borderlineRefRange
+                                                  ? findTest.borderlineRefRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.highRiskRefRange
+                                                  ? findTest.highRiskRefRange
+                                                  : "--"}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                {findTest.other
+                                                  ? findTest.other
+                                                  : "--"}
+                                              </TableCell>
+                                            </TableRow>
+                                          </TableBody>
+                                        );
+                                      });
 
-                                          )
-                                        })
-
-                                        return content;
-                                      }())
-                                    }
+                                      return content;
+                                    })()}
                                   </Table>
                                 </TableContainer>
                               </Grid>
-                            </Grid >
+                            </Grid>
                           </Box>
                         </>
                       );
@@ -356,24 +405,32 @@ export default function AddTestPage() {
                     Back
                   </Button> */}
                   <Box sx={{ flex: "1 1 auto" }} />
-                  {
-                    activeStep === steps.length - 1 ?
-                      (
-                        <Button onClick={onSubmit} variant="outlined">
-                          SUBMIT
-                        </Button>
-                      ) : (
-                        <Button onClick={handleNext} variant="outlined">
-                          NEXT
-                        </Button>
-                      )
-                  }
+                  {activeStep === steps.length - 1 ? (
+                    <Button onClick={onSubmit} variant="outlined">
+                      SUBMIT
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => {
+                          navigate("/admin/dashboard/test");
+                        }}
+                        variant="contained"
+                        sx={{ mx: 2 }}
+                      >
+                        CANCEL
+                      </Button>
+                      <Button onClick={handleNext} variant="outlined">
+                        NEXT
+                      </Button>
+                    </>
+                  )}
                 </Box>
               </React.Fragment>
             )}
           </Box>
-        </Paper >
-      </Container >
+        </Paper>
+      </Container>
     </>
   );
 }

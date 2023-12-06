@@ -53,10 +53,10 @@ const AdminHeader = () => {
           </IconButton>
         ) : (
           <div>
-            <Button color="inherit" onClick={onNavigateTest}>Add Test</Button>
-            <Button color="inherit">Contact Us</Button>
-            <Button color="inherit">Services</Button>
-            <Button color="inherit">FAQs</Button>
+            <Button color="inherit" onClick={onNavigateTest}>MANAGE TESTS</Button>
+            <Button color="inherit" disabled>Contact Us</Button>
+            <Button color="inherit" disabled>Services</Button>
+            <Button color="inherit" disabled>FAQs</Button>
           </div>
         )}
       </Toolbar>

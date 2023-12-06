@@ -30,6 +30,7 @@ const PrintResult = Loader(
 );
 const ManageTest = Loader(lazy(() => import("../pages/admin/ManageTest")));
 const AddTestPPage = Loader(lazy(() => import("../pages/admin/views/AddTest")));
+const ManageField = Loader(lazy(() => import("../pages/admin/ManageField")));
 
 //Component
 
@@ -90,6 +91,10 @@ const routes: RouteObject[] = [
           {
             path: "addTest",
             element: <AddTestPPage />,
+          },
+          {
+          path: "testFIeld",
+            element: <ManageField />,
           },
         ],
       },

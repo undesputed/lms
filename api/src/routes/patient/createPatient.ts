@@ -13,8 +13,6 @@ router.post(
     body("fullName").notEmpty().withMessage("FullName is required"),
     body("sex").isNumeric().withMessage("Gender is required"),
     body("birthdate").notEmpty().withMessage("Birthday is required"),
-    body("email").isEmail().notEmpty().withMessage("Email is Required"),
-    body("phone").notEmpty().withMessage("Phone Number is Required"),
     body("status").isNumeric().notEmpty().withMessage("Status is Required"),
   ],
   validateRequest,
@@ -51,19 +49,17 @@ router.post(
     });
 
     try {
-      const patient = await Patient.findOneByFullName(fullName);
-      if (patient) {
-        res.status(301).send({
-          message: "Patient already Exists",
-          data: { patient: patient },
-        });
-      } else {
-        const createPatient: any = await Patient.create(newPatient);
-
-        newPatient.id = createPatient.insertId;
-
-        res.status(201).send(newPatient);
-      }
+      // const patient = await Patient.findOneByFullName(fullName);
+      // if (patient) {
+      //   res.status(301).send({
+      //     message: "Patient already Exists",
+      //     data: { patient: patient },
+      //   });
+      // } else {
+      const createPatient: any = await Patient.create(newPatient);
+      newPatient.id = createPatient.insertId;
+      res.status(201).send(newPatient);
+      // }
     } catch (err) {
       throw new DatabaseQueryError("Something went wrong!!!");
     }

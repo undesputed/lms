@@ -13,4 +13,14 @@ router.get("/api/testField/", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/api/testField/:id", async (req: Request, res: Response) => {
+  try {
+    const id: number | string = req.params.id;
+    const response = await TestField.retrieveById(id);
+    res.status(200).send(response);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 export { router as testField };

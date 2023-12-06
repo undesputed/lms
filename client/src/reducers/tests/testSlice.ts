@@ -3,7 +3,14 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { createTest, deleteTest, findTestByTest, tests } from "../../api/testAPI";
+import {
+  createTest,
+  deleteTest,
+  deleteTestByField,
+  findTestByTest,
+  findTestDetailsByTest,
+  tests,
+} from "../../api/testAPI";
 import { RootState } from "../../app/store";
 import { ec_care_tests } from "../../entity/ec_care_tests";
 
@@ -19,11 +26,21 @@ export const fetchTests = createAsyncThunk("tests/fetchTests", async () => {
   return response;
 });
 
-export const getTestByTest = createAsyncThunk("tests/getTestByTest",
+export const getTestByTest = createAsyncThunk(
+  "tests/getTestByTest",
   async (test_id: number | string) => {
     const response = await findTestByTest(test_id);
     return response;
-  })
+  }
+);
+
+export const getTestByDetailId = createAsyncThunk(
+  "test/getTestByDetailId",
+  async (test_id: number | string) => {
+    const response = await findTestDetailsByTest(test_id);
+    return response;
+  }
+);
 
 export const addTests = createAsyncThunk(
   "tests/addTests",
@@ -39,7 +56,15 @@ export const removeTest = createAsyncThunk(
     const response = await deleteTest(test_id);
     return response;
   }
-)
+);
+
+export const removeTestByField = createAsyncThunk(
+  "tests/removeTestByField",
+  async (params: { test_id: number | string; field_id: number | string }) => {
+    const response = await deleteTestByField(params.test_id, params.field_id);
+    return response;
+  }
+);
 
 const patientSlice = createSlice({
   name: "patient",
@@ -66,6 +91,16 @@ const patientSlice = createSlice({
         testsAdapter.addOne(state, action.payload);
       })
       .addCase(addTests.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(removeTestByField.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeTestByField.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        testsAdapter.removeOne(state, action.payload);
+      })
+      .addCase(removeTestByField.rejected, (state) => {
         state.status = "failed";
       });
   },

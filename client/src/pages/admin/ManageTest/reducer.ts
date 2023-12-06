@@ -32,5 +32,15 @@ export const reducer = (state: State, action: Action) => {
         ...state,
         testCategoryId: action.payload,
       };
+    case "setOpenChangeOrder":
+      return {
+        ...state,
+        openChangeOrder: action.payload,
+      };
+    case "setTest":
+      return {
+        ...state,
+        test: action.payload,
+      };
   }
 };

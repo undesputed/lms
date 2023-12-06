@@ -84,9 +84,10 @@ const columns: GridColDef[] = [
       return !referral
         ? "--"
         : referral
-          ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${referral.middleName || ""
+        ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${
+            referral.middleName || ""
           }`
-          : "";
+        : "";
     },
   },
   {
@@ -128,6 +129,7 @@ const columns: GridColDef[] = [
       return (
         <>
           <GridActionsCellItem icon={<EditIcon />} label="Edit" />
+          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" />
         </>
       );
     },

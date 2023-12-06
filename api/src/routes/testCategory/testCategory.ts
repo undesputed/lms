@@ -17,10 +17,10 @@ router.get("/api/testCategory/:id", async (req: Request, res: Response) => {
   try {
     const id: number | string = req.params.id;
     const response: any = await TestCategory.findById(id);
-    res.status(200).send(response)
+    res.status(200).send(response);
   } catch (err) {
     console.log(err);
   }
-})
+});
 
 export { router as testCategory };

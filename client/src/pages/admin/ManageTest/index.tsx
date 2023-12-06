@@ -1,4 +1,13 @@
-import { Container, Box, Paper, Typography, Grid, IconButton, Button } from "@mui/material";
+import {
+  Container,
+  Box,
+  Paper,
+  Typography,
+  Grid,
+  IconButton,
+  Button,
+  Stack,
+} from "@mui/material";
 import React, { useReducer } from "react";
 import { Helmet } from "react-helmet-async";
 import SectionHeader from "../component/SectionHeader";
@@ -13,7 +22,10 @@ import {
 import { reducer } from "./reducer";
 import { initialState } from "./initialState";
 import { useAppDispatch } from "../../../actions/hooks";
-import { fetchTestCategory, removeTestCategory } from "../../../reducers/testCategory/testCategory";
+import {
+  fetchTestCategory,
+  removeTestCategory,
+} from "../../../reducers/testCategory/testCategory";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -24,9 +36,19 @@ import EditTestModal from "../component/EditTest";
 import { fetchTestField } from "../../../reducers/testField/testFieldSlice";
 import { BiPlusCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { removeTest } from "../../../reducers/tests/testSlice";
+import {
+  addTests,
+  getTestByDetailId,
+  getTestByTest,
+  removeTest,
+  removeTestByField,
+} from "../../../reducers/tests/testSlice";
 import { removeResultByTest } from "../../../reducers/results/resultsSlice";
 import { deleteResultByTest } from "../../../reducers/testResult/testResultSlice";
+import BiotechIcon from "@mui/icons-material/Biotech";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import ChangeOrder from "../component/ChangeOrder";
 
 const ManageTest = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -52,10 +74,8 @@ const ManageTest = () => {
   // Start of Button Events
   const onClickPreview = async (id: GridRowId, name: string) => {
     try {
-      const response = await appDispatch(fetchByFieldId(id));
-      if (
-        response.type === "testFieldCategory/fetchCategoryByFieldId/fulfilled"
-      ) {
+      const response = await appDispatch(getTestByDetailId(id));
+      if (response.type === "test/getTestByDetailId/fulfilled") {
         dispatch({
           type: "setTestCategoryField",
           payload: response.payload,
@@ -73,8 +93,13 @@ const ManageTest = () => {
 
   const onClickEdit = async (id: GridRowId, name: string) => {
     try {
-      const response = await appDispatch(fetchTestField());
+      const response: any = await appDispatch(fetchTestField());
       if (response.type === "testField/fetchField/fulfilled") {
+        const testRes: any = await appDispatch(getTestByTest(id));
+        dispatch({
+          type: "setTest",
+          payload: testRes.payload,
+        });
         dispatch({
           type: "setTestField",
           payload: response.payload,
@@ -91,7 +116,7 @@ const ManageTest = () => {
   };
 
   const onClickDelete = async (id: GridRowId) => {
-    const isConfirmed = window.confirm('Are you sure you want to proceed?');
+    const isConfirmed = window.confirm("Are you sure you want to proceed?");
 
     if (isConfirmed) {
       try {
@@ -99,21 +124,67 @@ const ManageTest = () => {
         if (resResult.type === "results/removeResultByTest/fulfilled") {
           const testRes: any = await appDispatch(removeTest(id));
           if (testRes.type === "tests/removeTest/fulfilled") {
-            const deleteTestRes: any = await appDispatch(deleteResultByTest(id));
-            if (deleteTestRes.type === "testResult/deleteTestResultByTest/fulfilled") {
+            const deleteTestRes: any = await appDispatch(
+              deleteResultByTest(id)
+            );
+            if (
+              deleteTestRes.type ===
+              "testResult/deleteTestResultByTest/fulfilled"
+            ) {
               const testCatRes: any = await appDispatch(removeTestCategory(id));
-              if (testCatRes.type === "testCategory/removeTestCategory/fulfilled") {
+              if (
+                testCatRes.type === "testCategory/removeTestCategory/fulfilled"
+              ) {
                 window.location.reload();
               }
             }
           }
         } else {
-          alert("Error Deleting Test")
+          alert("Error Deleting Test");
         }
       } catch (err) {
         console.log(err);
       }
     }
+  };
+
+  const onChangeOrder = async (id: any) => {
+    try {
+      const response = await appDispatch(getTestByDetailId(id));
+      if (response.type === "test/getTestByDetailId/fulfilled") {
+        dispatch({
+          type: "setTestField",
+          payload: response.payload,
+        });
+        onOpenChangeOrder();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickSubmit = (add: any, remove: any) => {
+    if (add.length > 0) {
+      add.map(async (d) => {
+        try {
+          await appDispatch(addTests(d));
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
+
+    if (remove.length > 0) {
+      remove.map(async (d) => {
+        try {
+          await appDispatch(removeTestByField(d));
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
+
+    onOpenEditModal();
   };
 
   const handleEditSubmit = () => {
@@ -128,9 +199,17 @@ const ManageTest = () => {
     onOpenPreviewModal();
   };
 
+  const handleChangeOrderClose = () => {
+    onOpenChangeOrder();
+  };
+
   const onClickAddTest = () => {
     navigate("/admin/dashboard/addTest");
-  }
+  };
+
+  const onClickAddField = () => {
+    navigate("/admin/dashboard/testFIeld");
+  };
   // End of Button Events
 
   // Start of On Change Events
@@ -145,6 +224,13 @@ const ManageTest = () => {
     dispatch({
       type: "setOpenEditModal",
       payload: !state.openEditModal,
+    });
+  };
+
+  const onOpenChangeOrder = () => {
+    dispatch({
+      type: "setOpenChangeOrder",
+      payload: !state.openChangeOrder,
     });
   };
   // End of On Change Events
@@ -215,6 +301,12 @@ const ManageTest = () => {
             onClick={() => onClickDelete(id)}
             color="inherit"
           />,
+          <GridActionsCellItem
+            icon={<ChangeCircleIcon />}
+            label="Delete"
+            onClick={() => onChangeOrder(id)}
+            color="inherit"
+          />,
         ];
       },
     },
@@ -257,20 +349,43 @@ const ManageTest = () => {
           <EditTestModal
             testField={state.testField}
             test_category_id={state.testCategoryId}
+            test={state.test}
+            onClickSubmit={onClickSubmit}
+            onClickClose={onOpenEditModal}
           />
         </ModalComponent>
+        <ModalComponent
+          open={state.openChangeOrder}
+          handleClose={onOpenChangeOrder}
+          title={`CHANGE ORDER`}
+          handleSubmit={handleChangeOrderClose}
+          showButton={false}
+          maxWidth="sm"
+        >
+          <ChangeOrder testField={state.testField} />
+        </ModalComponent>
         <Paper sx={{ p: { xs: 2, md: 3, width: "100%" } }}>
-          <SectionHeader title="TEST MANAGEMENT" />
-          <Box my={2}>
-            <Box
-              display={"flex"}
-              justifyContent={"left"}
-            >
-              <Button variant="outlined" endIcon={<BiPlusCircle />} onClick={onClickAddTest}>
+          <SectionHeader title="LABORATORY TEST MANAGEMENT" />
+          <Stack direction="row" spacing={2} my={2}>
+            <Box display={"flex"} justifyContent={"center"}>
+              <Button
+                variant="contained"
+                endIcon={<TextFieldsIcon />}
+                onClick={onClickAddField}
+              >
+                Test Field
+              </Button>
+            </Box>
+            <Box display={"flex"} justifyContent={"center"}>
+              <Button
+                variant="outlined"
+                endIcon={<BiotechIcon />}
+                onClick={onClickAddTest}
+              >
                 Add New Test
               </Button>
             </Box>
-          </Box>
+          </Stack>
           <DataGrid
             rows={state.testCategory}
             columns={columns}

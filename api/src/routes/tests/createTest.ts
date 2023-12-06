@@ -4,18 +4,14 @@ import Test from "../../model/test.model";
 const router = express.Router();
 
 router.post("/api/test", async (req: Request, res: Response) => {
-  const {
-    test_id,
-    field_id,
-    testDate,
-    status
-  } = req.body;
+  const { test_id, field_id, testDate, orderNum, status } = req.body;
 
   const newTest = new Test({
     id: null,
     test_id,
     field_id,
     testDate,
+    orderNum,
     status,
     created_at: new Date(),
     updated_at: null,

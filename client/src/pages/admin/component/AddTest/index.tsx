@@ -51,7 +51,7 @@ const AddNewTest: React.FC<AddTestProps> = ({
   onChecked,
   onSubmit,
   patient_id,
-  onCancel
+  onCancel,
 }) => {
   return (
     <Box>
@@ -84,19 +84,19 @@ const AddNewTest: React.FC<AddTestProps> = ({
       <Box sx={{ textAlign: "center" }} mt={2}>
         <Button
           size="medium"
-          variant="outlined"
-          sx={{ color: "#3695D1", mx: 1 }}
-          onClick={onSubmit}
-        >
-          Submit
-        </Button>
-        <Button
-          size="medium"
           variant="contained"
           sx={{ backgroundColor: "#3695D1", mx: 1 }}
           onClick={onCancel}
         >
           Cancel
+        </Button>
+        <Button
+          size="medium"
+          variant="outlined"
+          sx={{ color: "#3695D1", mx: 1 }}
+          onClick={onSubmit}
+        >
+          Submit
         </Button>
       </Box>
     </Box>

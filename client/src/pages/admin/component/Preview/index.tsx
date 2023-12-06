@@ -18,7 +18,7 @@ import { testResult } from "../../../../api/testResultAPI";
 import { ec_care_test_field_category_field } from "../../../../entity/ec_care_test_field_category_field";
 
 interface PreviewProps {
-  test_category_id: GridRowId;
+  test_category_id?: GridRowId;
   test_category_field: any[];
   onClose?: () => void;
 }

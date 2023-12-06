@@ -3,14 +3,14 @@ import { DatabaseQueryError } from "../errors/dbQueryError";
 
 export default class Patient {
   id: number | null;
-  fullName: string;
-  sex: number;
+  fullName: string | null;
+  sex: number | null;
   birthdate: Date | string | null;
   dateOfVisit: Date | string | null;
-  address: string;
-  email: string;
-  phone: string;
-  status: number;
+  address: string | null;
+  email: string | null;
+  phone: string | null;
+  status: number | null;
   created_at: Date | string | null;
   updated_at: Date | string | null;
   lms_company_id: number | null;

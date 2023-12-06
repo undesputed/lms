@@ -1,15 +1,15 @@
 export class ec_care_test_field {
   id: number | null;
   test_name: string;
-  unit: number;
-  maleRefRange: Date | string | null;
-  femaleRefRange: Date | string | null;
+  unit: string;
+  maleRefRange: string;
+  femaleRefRange: string;
   refRange: string;
   desirableRefRange: string;
   borderlineRefRange: string;
-  highRiskRefRange: number;
-  other: Date | string | null;
-  status: Date | string | null;
+  highRiskRefRange: string;
+  other: string;
+  status: number;
   created_at: Date | string | null;
   updated_at: Date | string | null;
 

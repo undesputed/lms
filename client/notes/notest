@@ -1,0 +1,8 @@
+npm run build
+
+go to build in ec2 and rm -rf *
+
+sudo rsync -avz -e "ssh -i eccarenew.pem" ./lms/client/build/ ec2-user@13.229.122.211:~/build
+
+root
+eccare123
