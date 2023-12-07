@@ -36,7 +36,11 @@ import { updateTestField } from "./routes/testField/updateTestField";
 
 const app = express();
 var corsOptions = {
-  origin: ["http://localhost:3000", "http://13.229.122.211"],
+  origin: [
+    "http://localhost:3000",
+    "http://13.229.122.211",
+    "http://52.221.217.221",
+  ],
 };
 app.use(json());
 app.use(cors(corsOptions));
