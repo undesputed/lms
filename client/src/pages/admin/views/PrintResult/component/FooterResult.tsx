@@ -27,19 +27,26 @@ const FooterResult: React.FC<FooterProps> = ({ medTech }) => {
         <TableBody>
           <TableRow>
             <TableCell colSpan={3} sx={{ border: "none", fontWeight: "600" }}>
-              {(function () {
-                console.log(medTech);
+              {/* {(function () {
+                let tech: string = "";
                 switch (medTech) {
                   case 1:
-                    return "ROCHELLE REUBEN C. VALLECERA, RMT, MLS (ASCPi)";
+                    tech = "ROCHELLE REUBEN C. VALLECERA, RMT, MLS (ASCPi)";
+                    break;
                   case 2:
-                    return "EMMANUEL B. GARCES, RMT";
+                    tech = "EMMANUEL B. GARCES, RMT";
+                    break;
                   case 3:
-                    return "MARITES DE LOS CIENTOS, RMT";
+                    tech = "MARITES DE LOS CIENTOS, RMT";
+                    break;
                   default:
-                    return "Hello world";
+                    tech = "Hello world";
+                    break;
                 }
-              })()}
+
+                return tech;
+              })()} */}
+              ROCHELLE REUBEN C. VALLECERA, RMT, MLS (ASCPi)
             </TableCell>
             <TableCell colSpan={3} sx={{ border: "none", fontWeight: "600" }}>
               THEODORE M. ZAMORA, MD, FPSP
@@ -47,7 +54,7 @@ const FooterResult: React.FC<FooterProps> = ({ medTech }) => {
           </TableRow>
           <TableRow>
             <TableCell colSpan={3} sx={{ border: "none" }}>
-              {(function () {
+              {/* {(function () {
                 switch (medTech) {
                   case 1:
                     return "Medical Technologist     Lic. No.: 0108908";
@@ -58,7 +65,8 @@ const FooterResult: React.FC<FooterProps> = ({ medTech }) => {
                   default:
                     return "Hello world";
                 }
-              })()}
+              })()} */}
+              Medical Technologist Lic. No.: 0108908
             </TableCell>
             <TableCell colSpan={3} sx={{ border: "none" }}>
               Pathologist Lic. No.: 93576

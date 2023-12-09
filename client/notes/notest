@@ -2,7 +2,9 @@ npm run build
 
 go to build in ec2 and rm -rf *
 
-sudo rsync -avz -e "ssh -i eccarenew.pem" ./lms/client/build/ ec2-user@13.229.122.211:~/build
+scp -i myweb.pem ./lms.sql ec2-user@ec2-52-221-217-221.ap-southeast-1.compute.amazonaws.com:/lms
+
+sudo rsync -avz -e "ssh -i eccarenew.pem" ./client/build/ ec2-user@13.229.122.211:~/build
 
 root
 eccare123

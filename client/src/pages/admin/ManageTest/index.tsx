@@ -270,7 +270,7 @@ const ManageTest = () => {
       type: "string",
       width: 200,
       editable: true,
-      align: "center",
+      align: "left",
       headerAlign: "center",
     },
     {

@@ -98,7 +98,7 @@ export default class Results {
     patient_id: number | string
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      const query = `select *, (lms_patient_results.id) as patient_results_id,(lms_test.id) as test_id,(lms_test_field.id) as field_id from lms_patient_results left join lms_test on lms_test.id = lms_patient_results.lms_test_id left join lms_test_field on lms_test_field.id = lms_test.field_id where lms_test.test_id = ${test_id} and lms_patient_id = ${patient_id} order by lms_test_field.id asc`;
+      const query = `select *, (lms_patient_results.id) as patient_results_id,(lms_test.id) as test_id,(lms_test_field.id) as field_id from lms_patient_results left join lms_test on lms_test.id = lms_patient_results.lms_test_id left join lms_test_field on lms_test_field.id = lms_test.field_id where lms_test.test_id = ${test_id} and lms_patient_id = ${patient_id} order by lms_test.orderNum asc`;
       sql.query(query, (err, res: any) => {
         if (err) {
           console.log(err);
