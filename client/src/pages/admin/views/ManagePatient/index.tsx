@@ -176,7 +176,7 @@ const ManagePatient: React.FC<PatientProps> = ({
   return (
     <Paper sx={{ p: { xs: 2, md: 3 } }}>
       <SectionHeader title="MANAGE PATIENT" />
-      <PatientSearchField onChange={onSearch} />
+      {/* <PatientSearchField onChange={onSearch} /> */}
       <DataGrid
         style={{
           width: "100%",

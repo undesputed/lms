@@ -4,6 +4,9 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Grid,
+  Box,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useAppDispatch } from "../../../../../actions/hooks";
@@ -20,13 +23,15 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
   const [test, setTest] = React.useState<any>();
   const [result, setResult] = React.useState<any>();
   const [background, setBackground] = React.useState<string>("");
+  const [type, setType] = React.useState<string>("");
   const appDispatch = useAppDispatch();
 
   React.useEffect(() => {
     async function fetchTestCat() {
       try {
-        const response = await appDispatch(fetchTestCatById(test_id));
+        const response: any = await appDispatch(fetchTestCatById(test_id));
         if (response.type === "testCategory/fetchTextCatById/fulfilled") {
+          setType(response.payload?.type);
           setTest(response.payload);
         }
       } catch (err) {
@@ -49,39 +54,52 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
       }
     }
 
-    async function setBackgroundColor() {
-      if (test?.type === "HEMATOLOGY RESULT") {
-        await setBackground("#d9d3e9");
-      } else if (test?.type === "IMMUNO-SEROLOGY RESULT") {
-        await setBackground("#D9D3E9");
-      } else if (test?.type === "CLINICAL MICROSCOPY RESULT") {
-        await setBackground("#D0E2F3");
-      } else if (test?.type === "CLINICAL CHEMISTRY RESULT") {
-        await setBackground("#D9EAD3");
-      } else if (test?.type === "IMAGING") {
-        await setBackground("#FFFFFF");
+    fetchTestCat();
+    fetchResult();
+  }, []);
+
+  React.useEffect(() => {
+    function setBackgroundColor() {
+      if (type === "HEMATOLOGY RESULT") {
+        setBackground("#d9d3e9");
+      } else if (type === "IMMUNO-SEROLOGY RESULT") {
+        setBackground("#D9D3E9");
+      } else if (type === "CLINICAL MICROSCOPY RESULT") {
+        setBackground("#D0E2F3");
+      } else if (type === "CLINICAL CHEMISTRY RESULT") {
+        setBackground("#D9EAD3");
+      } else if (type === "IMAGING") {
+        setBackground("#FFFFFF");
       } else {
-        await setBackground("#FFF3CC");
+        setBackground("#FFF3CC");
       }
     }
 
-    fetchTestCat();
-    fetchResult();
     setBackgroundColor();
-  }, []);
+  }, [type]);
 
   return (
     <>
       <TableContainer>
-        <Table aria-label="simple table" size="small">
-          <TableBody>
+        <Table
+          aria-label="simple table"
+          size="small"
+          sx={{
+            color: "black",
+            overflow: "hidden",
+          }}
+        >
+          <TableBody
+            sx={{
+              color: "black",
+            }}
+          >
             <TableRow>
               <TableCell
                 colSpan={6}
                 align="center"
                 sx={{
-                  borderTop: "1px solid grey",
-                  borderBottom: "1px solid grey",
+                  border: "1px solid #ccc",
                   color: "black",
                   fontSize: "20px",
                   fontWeight: "bold",
@@ -92,33 +110,198 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-              >
-                TEST NAME
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-              >
-                RESULT
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-              >
-                UNIT
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-              >
-                REFERENCE RANGE
-              </TableCell>
+              {(function () {
+                let header: any = [];
+                if (
+                  test?.name.toUpperCase() === "URINALYSIS" ||
+                  test?.name.toUpperCase() === "STOOL EXAM" ||
+                  test?.name.toUpperCase() === "CHEST PA(PEDIA/ADULT)"
+                ) {
+                  header.push();
+                } else {
+                  header.push(
+                    <>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "2px solid #ccc",
+                          color: "black",
+                        }}
+                      >
+                        TEST NAME
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "2px solid #ccc",
+                          color: "black",
+                        }}
+                      >
+                        RESULT
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "2px solid #ccc",
+                          color: "black",
+                        }}
+                      >
+                        UNIT
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "2px solid #ccc",
+                          color: "black",
+                        }}
+                      >
+                        REFERENCE RANGE
+                      </TableCell>
+                    </>
+                  );
+                }
+                return header;
+              })()}
             </TableRow>
             {(function () {
               let content = [];
+
+              if (test?.name.toUpperCase() === "URINALYSIS") {
+                content.push(
+                  <>
+                    <Grid container sx={{ border: "2px solid #ccc" }}>
+                      <Grid item xs={6} md={6}>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            border: "1px solid #ccc",
+                            color: "black",
+                            px: 1.5,
+                          }}
+                        >
+                          PHYSICAL AND CHEMICAL ANALYSIS
+                        </Typography>
+                        {result &&
+                          result.map((d, index) => {
+                            if (index <= 11) {
+                              return (
+                                <Grid container>
+                                  <Grid item xs={6} md={6}>
+                                    <TableCell
+                                      align="left"
+                                      sx={{ border: "none" }}
+                                    >
+                                      {d.test_name.toUpperCase()}
+                                    </TableCell>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{
+                                      border: "none",
+                                      fontWeight: "bold",
+                                      color: "black",
+                                    }}
+                                  >
+                                    <TableCell
+                                      align="center"
+                                      sx={{
+                                        border: "none",
+                                        fontWeight: "bold",
+                                        color: "black",
+                                      }}
+                                    >
+                                      {d.result}
+                                    </TableCell>
+                                  </Grid>
+                                </Grid>
+                              );
+                            }
+                          })}
+                      </Grid>
+                      <Grid item xs={6} md={6}>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            border: "1px solid #ccc",
+                            color: "black",
+                            px: 1.5,
+                          }}
+                        >
+                          MICROSCOPIC ANALYSIS
+                        </Typography>
+                        {result &&
+                          result.map((d, index) => {
+                            if (index >= 12) {
+                              return (
+                                <Grid container>
+                                  <Grid item xs={4} md={4}>
+                                    <TableCell
+                                      align="left"
+                                      sx={{ border: "none" }}
+                                    >
+                                      {d.test_name.toUpperCase()}
+                                    </TableCell>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={4}
+                                    md={4}
+                                    sx={{
+                                      border: "none",
+                                      fontWeight: "bold",
+                                      color: "black",
+                                    }}
+                                  >
+                                    <TableCell
+                                      align="center"
+                                      sx={{
+                                        border: "none",
+                                        fontWeight: "bold",
+                                        color: "black",
+                                      }}
+                                    >
+                                      {d.result}
+                                    </TableCell>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={4}
+                                    md={4}
+                                    sx={{
+                                      border: "none",
+                                      fontWeight: "bold",
+                                      color: "black",
+                                    }}
+                                  >
+                                    <TableCell
+                                      align="center"
+                                      sx={{ border: "none" }}
+                                    >
+                                      {d.other}
+                                    </TableCell>
+                                  </Grid>
+                                </Grid>
+                              );
+                            }
+                          })}
+                      </Grid>
+                    </Grid>
+                  </>
+                );
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
 
               if (test?.name.toUpperCase() === "CBC") {
                 content.push(
@@ -126,11 +309,105 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                     <TableCell
                       align="left"
                       colSpan={4}
-                      sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
+                      sx={{
+                        fontWeight: "bold",
+                        border: "2px solid #ccc",
+                        color: "black",
+                      }}
                     >
                       BLOOD COUNT
                     </TableCell>
                   </TableRow>
+                );
+
+                result &&
+                  result.map((d, index) => {
+                    if (index === 5) {
+                      content.push(
+                        <>
+                          <TableRow>
+                            <TableCell
+                              align="left"
+                              colSpan={4}
+                              sx={{
+                                fontWeight: "bold",
+                                border: "2px solid #ccc",
+                                color: "black",
+                              }}
+                            >
+                              DIFFERENTIAL COUNT
+                            </TableCell>
+                          </TableRow>
+                        </>
+                      );
+                    }
+
+                    if (index === 11) {
+                      content.push(
+                        <TableRow>
+                          <TableCell
+                            align="left"
+                            colSpan={4}
+                            sx={{
+                              fontWeight: "bold",
+                              border: "2px solid #ccc",
+                              color: "black",
+                            }}
+                          >
+                            RBC PARAMETERS
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                    content.push(
+                      <TableRow
+                        sx={{
+                          borderRight: "2px solid #ccc",
+                          borderLeft: "2px solid #ccc",
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {d.test_name.toUpperCase()}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {d.result}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            display: "flex",
+                            justifyContent: "space-around",
+                            color: "black",
+                          }}
+                        >
+                          {d.unit}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {d.refRange}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  });
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
                 );
               }
 
@@ -140,147 +417,145 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                     <TableCell
                       align="left"
                       colSpan={4}
-                      sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
+                      sx={{
+                        fontWeight: "bold",
+                        border: "2px solid #ccc",
+                        color: "black",
+                      }}
                     >
                       GROSS EXAM
                     </TableCell>
                   </TableRow>
                 );
-              }
-              result &&
-                result.map((d, index) => {
-                  if (test?.name.toUpperCase() === "CBC" && index === 5) {
-                    content.push(
-                      <>
+
+                result &&
+                  result.map((d, index) => {
+                    if (index === 2) {
+                      content.push(
                         <TableRow>
                           <TableCell
                             align="left"
                             colSpan={4}
                             sx={{
                               fontWeight: "bold",
-                              border: "1px solid #ccc",
+                              border: "2px solid #ccc",
+                              color: "black",
                             }}
                           >
-                            DIFFERENTIAL COUNT
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  }
-
-                  if (test?.name === "CBC" && index === 11) {
-                    content.push(
-                      <TableRow>
-                        <TableCell
-                          align="left"
-                          colSpan={4}
-                          sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-                        >
-                          RBC PARAMETERS
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-
-                  if (
-                    test?.name.toUpperCase() === "STOOL EXAM" &&
-                    index === 2
-                  ) {
-                    content.push(
-                      <TableRow>
-                        <TableCell
-                          align="left"
-                          colSpan={4}
-                          sx={{ fontWeight: "bold", border: "1px solid #ccc" }}
-                        >
-                          MICROSCOPIC ANALYSIS
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-
-                  if (
-                    test?.name === "STOOL EXAM" &&
-                    index === 0 &&
-                    index === 1
-                  ) {
-                    if (
-                      d.test_name.toUpperCase() === "COLOR" ||
-                      d.test_name.toUpperCase() === "CONSISTENCY"
-                    ) {
-                      content.push(
-                        <TableRow
-                          sx={{
-                            borderRight: "1px solid #ccc",
-                            borderLeft: "1px solid #ccc",
-                          }}
-                        >
-                          <TableCell align="left" sx={{ border: "none" }}>
-                            {d.test_name.toUpperCase()}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ border: "none", fontWeight: "bold" }}
-                          >
-                            {d.result}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              border: "none",
-                              display: "flex",
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            {d.unit}
-                          </TableCell>
-                          <TableCell align="center" sx={{ border: "none" }}>
-                            {d.refRange}
+                            MICROSCOPIC ANALYSIS
                           </TableCell>
                         </TableRow>
                       );
                     }
-                  }
-                  content.push(
-                    <TableRow
-                      sx={{
-                        borderRight: "1px solid #ccc",
-                        borderLeft: "1px solid #ccc",
-                      }}
-                    >
-                      <TableCell align="left" sx={{ border: "none" }}>
-                        {d.test_name.toUpperCase()}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ border: "none", fontWeight: "bold" }}
-                      >
-                        {d.result}
-                      </TableCell>
-                      <TableCell
-                        align="center"
+                    content.push(
+                      <TableRow
                         sx={{
-                          border: "none",
-                          display: "flex",
-                          justifyContent: "space-around",
+                          borderRight: "2px solid #ccc",
+                          borderLeft: "2px solid #ccc",
                         }}
                       >
-                        {d.unit}
-                      </TableCell>
-                      <TableCell align="center" sx={{ border: "none" }}>
-                        {d.refRange}
-                      </TableCell>
-                    </TableRow>
-                  );
-                });
+                        <TableCell
+                          align="left"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {d.test_name.toUpperCase()}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {d.result}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            display: "flex",
+                            justifyContent: "space-around",
+                            color: "black",
+                          }}
+                        >
+                          {test?.name.toUpperCase() === "URINALYSIS" ||
+                          test?.name === "STOOL EXAM"
+                            ? d.other
+                            : d.unit}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {test?.name.toUpperCase() === "URINALYSIS" ||
+                          test?.name === "STOOL EXAM"
+                            ? null
+                            : d.refRange}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  });
+
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
+
+              if (test?.name.toUpperCase() === "CHEST PA(PEDIA/ADULT)") {
+                content.push(
+                  <>
+                    <Box m={5}>
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "20px",
+                          fontWeight: "bolder",
+                        }}
+                      >
+                        Results:
+                      </Typography>
+                      <p>
+                        PA view of he chest reveals the lungs are clear.
+                        Pulmonary structure is and shows vascular markings. The
+                        mediastinum is centered and of normal width. The
+                        tracheal air shadow is midline. The cardiac size and
+                        configuration are within normal limits. Both
+                        hemidiaphragms and costophrenic angles are sharp and
+                        intact. The visualized osseous thoracic cage shows no
+                        bony abnormality.
+                      </p>
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "20px",
+                          fontWeight: "bolder",
+                        }}
+                        mt={5}
+                      >
+                        IMPRESSION:
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "20px",
+                          textAlign: "center",
+                          fontWeight: "bolder",
+                        }}
+                      >
+                        NORMAL CHEST
+                      </Typography>
+                    </Box>
+                  </>
+                );
+              }
 
               return content;
             })()}
-            <TableRow
-              sx={{
-                border: "1px solid #ccc",
-              }}
-            ></TableRow>
           </TableBody>
         </Table>
       </TableContainer>

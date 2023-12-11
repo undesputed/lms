@@ -8,13 +8,14 @@ import {
   TableHead,
 } from "@mui/material";
 import React from "react";
-import logo from "../../../../../assets/image/logo/Logo.png";
+import logo from "../../../../../assets/image/logo/icon.png";
 
 const Header = () => {
   return (
     <TableContainer
       sx={{
         borderBottom: "1px solid grey",
+        color: "black",
       }}
     >
       <Table aria-label="simple table">
@@ -34,11 +35,12 @@ const Header = () => {
               rowSpan={4}
               colSpan={2}
               width={200}
+              height={150}
               sx={{
                 position: "relative",
                 backgroundImage: `url(${logo})`,
                 backgroundPosition: "center",
-                backgroundSize: "contain",
+                backgroundSize: "90%",
                 backgroundOrigin: "border-box",
                 backgroundRepeat: "no-repeat",
                 border: "none",
@@ -59,33 +61,15 @@ const Header = () => {
               >
                 EC CARE MEDICAL LABORATORY
               </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              colSpan={4}
-              sx={{ border: "none", py: "0", my: "0" }}
-              height={"20px"}
-            >
-              241 Ouano Ext., Ibabao Estancia, Mandaue City, Cebu, 6014{" "}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              colSpan={4}
-              sx={{ border: "none", py: "0", my: "0" }}
-              height={"20px"}
-            >
-              Contact No: 254 9527 / 09270796274 / 09202629412{" "}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              colSpan={4}
-              sx={{ border: "none", py: "0", my: "0" }}
-              height={"20px"}
-            >
-              Email Add: eccaremedical@gmail.com{" "}
+              <Typography variant="h5">
+                41 Ouano Ext., Ibabao Estancia, Mandaue City, Cebu, 6014 Contact
+              </Typography>
+              <Typography variant="h5">
+                No: 254 9527 / 09270796274 / 09202629412
+              </Typography>
+              <Typography variant="h5">
+                Email: eccaremedical@gmail.com
+              </Typography>
             </TableCell>
           </TableRow>
         </TableBody>

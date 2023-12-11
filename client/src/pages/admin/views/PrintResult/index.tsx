@@ -73,7 +73,6 @@ const TablePreview = () => {
   }, []);
 
   React.useEffect(() => {
-    console.log(medTechId);
     if (patient) {
       dispatch({
         type: "setPatient",
@@ -92,10 +91,11 @@ const TablePreview = () => {
             <Paper
               sx={{
                 p: { xs: 2, md: 3 },
-                height: "1024px",
+                height: "1030px",
                 width: "816px",
                 display: "flex",
                 flexDirection: "column",
+                color: "black",
               }}
             >
               <Box>

@@ -249,13 +249,37 @@ const AdminDashboard = () => {
             const testResponse: any = await appDispatch(getTestByTest(d));
 
             if (testResponse.type === "tests/getTestByTest/fulfilled") {
+              console.log(testResponse);
               testResponse.payload.map(async (item: any) => {
-                const resData: any = {
+                let resData: any = {
                   result: null,
                   lms_patient_id: response.payload?.id,
                   lms_test_id: item.id,
                   testDate: new Date().toDateString().split("T")[0],
                 };
+                if (
+                  item.field_id === 33 ||
+                  item.field_id === 34 ||
+                  item.field_id === 35 ||
+                  item.field_id === 36 ||
+                  item.field_id === 37 ||
+                  item.field_id === 38 ||
+                  item.field_id === 39
+                ) {
+                  resData.result = "NONE SEEN";
+                }
+
+                if (
+                  item.field_id === 17 ||
+                  item.field_id === 18 ||
+                  item.field_id === 19 ||
+                  item.field_id === 22 ||
+                  item.field_id === 24 ||
+                  item.field_id === 25 ||
+                  item.field_id === 26
+                ) {
+                  resData.result = "NEGATIVE";
+                }
                 await appDispatch(insertResult(resData));
               });
             }
@@ -270,7 +294,22 @@ const AdminDashboard = () => {
           handleModal();
           dispatch({
             type: "setPatients",
-            payload: [],
+            payload: {
+              id: null,
+              fullName: "",
+              sex: 0,
+              birthdate: "2000-01-01",
+              dateOfVisit: new Date().toISOString().split("T")[0],
+              address: "",
+              email: "",
+              phone: "",
+              status: 0,
+              created_at: new Date().toISOString().split("T")[0],
+              updated_at: null,
+              lms_company_id: null,
+              lms_referral_id: null,
+              lms_hmo_id: null,
+            },
           });
           dispatch({
             type: "setValue",
@@ -300,9 +339,7 @@ const AdminDashboard = () => {
   const onPreview = () => {
     if (
       state.patient.birthdate === null ||
-      state.patient.email === "" ||
       state.patient.fullName === "" ||
-      state.patient.phone === "" ||
       state.patient.sex === 0
     ) {
       alert("All Fields are required!!!");
