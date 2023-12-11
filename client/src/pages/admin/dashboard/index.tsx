@@ -328,9 +328,9 @@ const AdminDashboard = () => {
       const updatedPatient: ec_care_patient = state.updateProfile;
       const response = await appDispatch(editPatient(updatedPatient));
       if (response.type === "patient/editPatient/fulfilled") {
+        window.location.reload();
         openEditPatient();
         retrievePatient();
-        window.location.reload();
       }
     } catch (err) {
       console.log(err);

@@ -12,7 +12,6 @@ router.post(
   [
     body("fullName").notEmpty().withMessage("FullName is required"),
     body("sex").isNumeric().withMessage("Gender is required"),
-    body("birthdate").notEmpty().withMessage("Birthday is required"),
     body("status").isNumeric().notEmpty().withMessage("Status is Required"),
   ],
   validateRequest,

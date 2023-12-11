@@ -50,12 +50,6 @@ const UpdatePatientForm: React.FC<UpdatePatientProps> = ({
     return age;
   }
 
-  const addOneDay = (date) => {
-    const newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + 1);
-    return newDate;
-  };
-
   return (
     <>
       <Paper sx={{ p: { xs: 2, md: 3 } }}>
@@ -83,7 +77,7 @@ const UpdatePatientForm: React.FC<UpdatePatientProps> = ({
                 helperText="Birth Day"
                 placeholder="Birth Day"
                 type="date"
-                value={addOneDay(patient.birthdate).toISOString().split("T")[0]}
+                value={new Date(patient.birthdate).toISOString().split("T")[0]}
                 onChange={(e) => onChangeUpdate(e)}
               />
             </Grid>
