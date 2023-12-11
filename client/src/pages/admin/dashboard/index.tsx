@@ -330,6 +330,7 @@ const AdminDashboard = () => {
       if (response.type === "patient/editPatient/fulfilled") {
         openEditPatient();
         retrievePatient();
+        window.location.reload();
       }
     } catch (err) {
       console.log(err);

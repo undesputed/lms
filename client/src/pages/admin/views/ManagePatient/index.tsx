@@ -44,13 +44,17 @@ const columns: GridColDef[] = [
     headerAlign: "right",
     renderCell(params) {
       const dateObject = new Date(params.row.birthdate);
-      const formattedDate = dateObject.toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
 
-      return formattedDate;
+      function convertDateFormat(dateObject) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        const formattedDateString = dateObject.toLocaleDateString(
+          "en-US",
+          options
+        );
+        return formattedDateString;
+      }
+
+      return convertDateFormat(dateObject);
     },
   },
   {
