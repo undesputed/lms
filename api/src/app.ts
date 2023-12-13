@@ -33,6 +33,7 @@ import { deleteResults } from "./routes/results/deleteResults";
 import { createTestField } from "./routes/testField/createTestFIeld";
 import { deleteTestField } from "./routes/testField/deleteTestField";
 import { updateTestField } from "./routes/testField/updateTestField";
+import { deletePatient } from "./routes/patient/deletePatient";
 
 const app = express();
 var corsOptions = {
@@ -78,6 +79,7 @@ app.use(deleteTestCategory);
 app.use(deleteTest);
 app.use(deleteResults);
 app.use(deleteTestField);
+app.use(deletePatient);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError("Not Found");

@@ -118,11 +118,24 @@ const AdminDashboard = () => {
 
   const onChangeTextField = (event: any) => {
     const { name, value } = event.target;
-    dispatch({
-      type: "setPatient",
-      name: name,
-      value: value,
-    });
+    if (name === "birthdate" || name === "dateOfVisit") {
+      const inputDate = new Date(value);
+      if (isValidDate(inputDate)) {
+        dispatch({
+          type: "setPatient",
+          name: name,
+          value: value,
+        });
+      } else {
+        return;
+      }
+    } else {
+      dispatch({
+        type: "setPatient",
+        name: name,
+        value: value,
+      });
+    }
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -132,13 +145,30 @@ const AdminDashboard = () => {
     });
   };
 
+  const isValidDate = (date) => {
+    return date instanceof Date && !isNaN(date.getTime());
+  };
+
   const onChangeUpdate = (event: any) => {
     const { name, value } = event.target;
-    dispatch({
-      type: "onChangeUpdateProfile",
-      name: name,
-      value: value,
-    });
+    if (name === "birthdate" || name === "dateOfVisit") {
+      const inputDate = new Date(value);
+      if (isValidDate(inputDate)) {
+        dispatch({
+          type: "onChangeUpdateProfile",
+          name: name,
+          value: value,
+        });
+      } else {
+        return;
+      }
+    } else {
+      dispatch({
+        type: "onChangeUpdateProfile",
+        name: name,
+        value: value,
+      });
+    }
   };
 
   const openEditPatient = () => {
@@ -225,7 +255,7 @@ const AdminDashboard = () => {
     try {
       const patient: ec_care_patient = state.patient;
       const response: any = await appDispatch(addPatient(patient));
-
+      console.log(response);
       if (response.type === "patient/createPatient/fulfilled") {
         let resultData: ec_care_testResult[] = [];
         let test_id = [];
@@ -338,12 +368,8 @@ const AdminDashboard = () => {
   };
 
   const onPreview = () => {
-    if (
-      state.patient.birthdate === null ||
-      state.patient.fullName === "" ||
-      state.patient.sex === 0
-    ) {
-      alert("All Fields are required!!!");
+    if (state.patient.fullName === "") {
+      alert("Full name is required!!!");
       return;
     }
     handleModal();

@@ -185,7 +185,7 @@ const ManageResult = () => {
       });
   };
 
-  const handleChange = debounce((id: number, event: any) => {
+  const handleFieldChange = (id: number, event: any) => {
     const { value, name } = event.target;
     const findField = state.patientResult.find(
       (d) => d.patient_results_id === id
@@ -193,7 +193,7 @@ const ManageResult = () => {
     findField.result = value;
     const find = state.container.find((d) => d.id === id);
     if (find) {
-      return;
+      find.result = value;
     }
     const result = {
       result: value,
@@ -201,10 +201,6 @@ const ManageResult = () => {
     };
 
     state.container.push(result);
-  }, 500);
-
-  const handleFieldChange = (id: number, event: any) => {
-    handleChange(id, event);
   };
   // End Handle on Change
 

@@ -126,7 +126,8 @@ const AddPatient: React.FC<AddPatientProps> = ({
                 type="date"
                 id="outlined-select-currency"
                 helperText="Date of Visit"
-                value={currentDate}
+                value={patient.dateOfVisit}
+                name="dateOfVisit"
                 InputProps={{
                   inputProps: {
                     min: new Date().toISOString().split("T")[0], // set minimum date to today's date
@@ -135,7 +136,7 @@ const AddPatient: React.FC<AddPatientProps> = ({
                 style={{
                   width: "100%",
                 }}
-                disabled
+                onChange={(e: any) => onChange(e)}
               />
             </Grid>
             <Grid item xs={12} md={3}>

@@ -125,4 +125,22 @@ export default class Patient {
       );
     });
   }
+
+  static async delete(patient_id: number | string): Promise<any | null> {
+    return new Promise((resolve, reject) => {
+      sql.query(
+        `DELETE FROM lms_patient
+                WHERE id = ${patient_id}
+                `,
+        (err, res: any) => {
+          if (err) {
+            console.log(err);
+            reject(new DatabaseQueryError("Error Deleting Test Result"));
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
 }

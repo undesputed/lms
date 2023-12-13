@@ -14,14 +14,30 @@ router.delete("/api/testResult/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/api/testResult/byTest/:test_id", async (req: Request, res: Response) => {
-  try {
-    const id: number | string = req.params.test_id;
-    const response = await TestResult.deleteByTestId(id);
-    res.status(200).send(response);
-  } catch (err) {
-    console.log(err);
+router.delete(
+  "/api/testResult/byTest/:test_id",
+  async (req: Request, res: Response) => {
+    try {
+      const id: number | string = req.params.test_id;
+      const response = await TestResult.deleteByTestId(id);
+      res.status(200).send(response);
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
+
+// router.delete(
+//   "/api/testResult/byPatient/:patient_id",
+//   async (req: Request, res: Response) => {
+//     try {
+//       const id: number | string = req.params.patient_id;
+//       const response = await TestResult.deleteByTestPatient(id);
+//       res.status(200).send(response);
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// );
 
 export { router as deleteTestResult };
