@@ -254,6 +254,7 @@ const AdminDashboard = () => {
   const handleSubmit = async () => {
     try {
       const patient: ec_care_patient = state.patient;
+      console.log(patient);
       const response: any = await appDispatch(addPatient(patient));
       console.log(response);
       if (response.type === "patient/createPatient/fulfilled") {

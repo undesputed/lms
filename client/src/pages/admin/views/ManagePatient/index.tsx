@@ -43,6 +43,9 @@ const columns: GridColDef[] = [
     align: "right",
     headerAlign: "right",
     renderCell(params) {
+      if (params.row.birthdate === null) {
+        return "N/A";
+      }
       const dateObject = new Date(params.row.birthdate);
 
       function convertDateFormat(dateObject) {
@@ -64,7 +67,13 @@ const columns: GridColDef[] = [
     headerAlign: "left",
     width: 70,
     renderCell(params) {
-      return params.row.sex === 1 ? "Male" : "Female";
+      let gender = "N/A";
+      if (params.row.sex === 1) {
+        gender = "MALE";
+      } else if (params.row.sex === 2) {
+        gender = "FEMALE";
+      }
+      return gender;
     },
   },
   {

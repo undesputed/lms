@@ -100,7 +100,7 @@ const TablePreview = () => {
             >
               <Box>
                 <Header />
-                <PatientHeader patient={state.patient} />
+                <PatientHeader test_id={d.test_id} patient={state.patient} />
               </Box>
 
               <Box

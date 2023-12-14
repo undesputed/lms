@@ -219,8 +219,8 @@ const AddPatient: React.FC<AddPatientProps> = ({
                 style={{
                   width: "100%",
                 }}
-                name="companyName"
-                disabled
+                name="company"
+                onChange={(e) => onChange(e)}
               />
             </Grid>
           </Grid>

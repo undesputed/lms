@@ -216,8 +216,8 @@ const UpdatePatientForm: React.FC<UpdatePatientProps> = ({
                 style={{
                   width: "100%",
                 }}
-                name="companyName"
-                disabled
+                name="company"
+                onChange={(e: any) => onChangeUpdate(e)}
               />
             </Grid>
           </Grid>

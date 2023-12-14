@@ -245,6 +245,27 @@ const PreviewPatient: React.FC<PatientProps> = ({ patient, tests, age }) => {
             justifyContent={"space-between"}
           >
             <Typography component="h4" variant="h4" paddingX={1}>
+              Company:
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              paddingX={1}
+              sx={{ fontWeight: 400, whiteSpace: 5 }}
+            >
+              {patient.company}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <Box
+            sx={{ width: "100%", borderColor: "#0d7f3f" }}
+            display={"flex"}
+            flexDirection={"row"}
+            alignItems={"left"}
+            justifyContent={"space-between"}
+          >
+            <Typography component="h4" variant="h4" paddingX={1}>
               Lists of Tests:
             </Typography>
             <Box>

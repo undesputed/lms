@@ -10,6 +10,7 @@ export class ec_care_patient {
   address: string | null;
   email: string | null;
   phone: string | null;
+  company: string | null;
   status: number | null;
   created_at: Date | string | null;
   updated_at: Date | string | null;

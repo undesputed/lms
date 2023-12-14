@@ -10,6 +10,7 @@ export default class Patient {
   address: string | null;
   email: string | null;
   phone: string | null;
+  company: string | null;
   status: number | null;
   created_at: Date | string | null;
   updated_at: Date | string | null;
@@ -19,14 +20,15 @@ export default class Patient {
 
   constructor(patient: {
     id: number | null;
-    fullName: string;
-    sex: number;
+    fullName: string | null;
+    sex: number | null;
     birthdate: Date | string | null;
     dateOfVisit: Date | string | null;
-    address: string;
-    email: string;
-    phone: string;
-    status: number;
+    address: string | null;
+    email: string | null;
+    phone: string | null;
+    company: string | null;
+    status: number | null;
     created_at: Date | string | null;
     updated_at: Date | string | null;
     lms_company_id: number | null;
@@ -41,6 +43,7 @@ export default class Patient {
     this.address = patient.address;
     this.email = patient.email;
     this.phone = patient.phone;
+    this.company = patient.company;
     this.status = patient.status;
     this.created_at = patient.created_at;
     this.updated_at = patient.updated_at;

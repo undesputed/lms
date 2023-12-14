@@ -7,6 +7,7 @@ import {
   Grid,
   Box,
   Typography,
+  Stack,
 } from "@mui/material";
 import React from "react";
 import { useAppDispatch } from "../../../../../actions/hooks";
@@ -95,19 +96,21 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
             }}
           >
             <TableRow>
-              <TableCell
-                colSpan={6}
-                align="center"
-                sx={{
-                  border: "1px solid #ccc",
-                  color: "black",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  backgroundColor: { background },
-                }}
-              >
-                {test?.type}
-              </TableCell>
+              {test?.type === "IMAGING" ? null : (
+                <TableCell
+                  colSpan={6}
+                  align="center"
+                  sx={{
+                    border: "1px solid #ccc",
+                    color: "black",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    backgroundColor: { background },
+                  }}
+                >
+                  {test?.type}
+                </TableCell>
+              )}
             </TableRow>
             <TableRow>
               {(function () {
@@ -411,7 +414,7 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                 );
               }
 
-              if (test?.name === "STOOL EXAM") {
+              if (test?.name.toUpperCase() === "STOOL EXAM") {
                 content.push(
                   <TableRow>
                     <TableCell
@@ -519,16 +522,30 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                       >
                         Results:
                       </Typography>
-                      <p>
-                        PA view of he chest reveals the lungs are clear.
-                        Pulmonary structure is and shows vascular markings. The
-                        mediastinum is centered and of normal width. The
-                        tracheal air shadow is midline. The cardiac size and
-                        configuration are within normal limits. Both
-                        hemidiaphragms and costophrenic angles are sharp and
-                        intact. The visualized osseous thoracic cage shows no
-                        bony abnormality.
-                      </p>
+                      <Box display={"flex"} flexDirection={"column"} mt={1}>
+                        <Typography>
+                          PA view of he chest reveals the lungs are clear.
+                        </Typography>
+                        <Typography>
+                          Pulmonary structure is and shows vascular markings.
+                        </Typography>
+                        <Typography>
+                          The mediastinum is centered and of normal width. The
+                        </Typography>
+                        <Typography>
+                          tracheal air shadow is midline. The cardiac size and
+                        </Typography>
+                        <Typography>
+                          configuration are within normal limits. Both
+                        </Typography>
+                        <Typography>
+                          hemidiaphragms and costophrenic angles are sharp and
+                        </Typography>
+                        <Typography>
+                          intact. The visualized osseous thoracic cage shows no
+                          bony abnormality.
+                        </Typography>
+                      </Box>
                       <Typography
                         sx={{
                           color: "black",
@@ -547,7 +564,16 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                           fontWeight: "bolder",
                         }}
                       >
-                        NORMAL CHEST
+                        {(function () {
+                          const exam: any = [];
+                          result &&
+                            result.map((d, index) => {
+                              if (index === 1) {
+                                exam.push(d.result?.toUpperCase());
+                              }
+                            });
+                          return exam;
+                        })()}
                       </Typography>
                     </Box>
                   </>

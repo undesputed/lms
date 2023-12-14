@@ -13,6 +13,7 @@ export const initialState: State = {
     address: "",
     email: "",
     phone: "",
+    company: "",
     status: 0,
     created_at: new Date().toISOString().split("T")[0],
     updated_at: null,
