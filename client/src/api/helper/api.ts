@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: `http://localhost:4000/api/`,
-  // baseURL: `http://52.221.217.221:4000/api/`,
+  // baseURL: `http://localhost:4000/api/`,
+  baseURL: `http://52.221.217.221:4000/api/`,
 });
 
 // API.interceptors.request.use((req: any) => {

@@ -112,7 +112,7 @@ const TablePreview = () => {
               </Box>
 
               <Box sx={{ marginTop: "auto" }}>
-                <FooterResult medTech={medTechId} />
+                <FooterResult medTech={medTechId} test_id={d.test_id} />
               </Box>
             </Paper>
           );

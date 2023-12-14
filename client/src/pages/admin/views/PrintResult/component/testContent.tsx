@@ -568,7 +568,7 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                           const exam: any = [];
                           result &&
                             result.map((d, index) => {
-                              if (index === 1) {
+                              if (index === 0) {
                                 exam.push(d.result?.toUpperCase());
                               }
                             });

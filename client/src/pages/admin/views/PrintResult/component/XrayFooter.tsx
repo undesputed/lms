@@ -19,6 +19,8 @@ import zamoraSig from "../../../../../assets/image/esig/Doc_Zamora_Esig-removebg
 import pippoSig from "../../../../../assets/image/esig/DR. PIPPO MANGUBAT.png";
 import romeroSig from "../../../../../assets/image/esig/DR. ROMERO.png";
 import maritesSig from "../../../../../assets/image/esig/MAAM_MARITES-removebg-preview.png";
+import katrinaSig from "../../../../../assets/image/esig/KRISTINA ATA.png";
+import sorianoSig from "../../../../../assets/image/esig/DR SORIANO.png";
 
 interface FooterProps {
   medTech?: any;
@@ -45,7 +47,7 @@ const FooterResult: React.FC<FooterProps> = ({ medTech }) => {
               }}
             >
               <img
-                src={emmanSig}
+                src={katrinaSig}
                 width={"30%"}
                 style={{
                   position: "absolute",
@@ -67,7 +69,7 @@ const FooterResult: React.FC<FooterProps> = ({ medTech }) => {
               }}
             >
               <img
-                src={zamoraSig}
+                src={sorianoSig}
                 width={"50%"}
                 style={{
                   position: "absolute",
