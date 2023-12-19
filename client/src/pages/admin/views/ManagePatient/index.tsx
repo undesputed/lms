@@ -84,24 +84,24 @@ const columns: GridColDef[] = [
     width: 130,
   },
   {
-    field: "lms_referral_id",
-    headerName: "Referred By",
+    field: "company",
+    headerName: "Company",
     align: "center",
     headerAlign: "center",
-    width: 150,
-    renderCell: (params) => {
-      const referral = useAppSelector((state: RootState) =>
-        selectReferralById(state, params.row.lms_referral_id)
-      );
+    width: 150
+    // renderCell: (params) => {
+    //   const referral = useAppSelector((state: RootState) =>
+    //     selectReferralById(state, params.row.lms_referral_id)
+    //   );
 
-      return !referral
-        ? "--"
-        : referral
-        ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${
-            referral.middleName || ""
-          }`
-        : "";
-    },
+    //   return !referral
+    //     ? "--"
+    //     : referral
+    //     ? `Dr. ${referral.surname || ""} ${referral.givenName || ""} ${
+    //         referral.middleName || ""
+    //       }`
+    //     : "";
+    // },
   },
   {
     field: "lms_hmo_id",

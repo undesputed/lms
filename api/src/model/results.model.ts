@@ -170,7 +170,8 @@ export default class Results {
   ): Promise<any | null> {
     return new Promise((resolve, reject) => {
       sql.query(
-        `DELETE FROM lms_patient_results WHERE lms_patient_id = ${patient_id}`,
+        `DELETE FROM lms_patient_results
+        WHERE lms_patient_id = ${patient_id}`,
         (err, res: any) => {
           if (err) {
             console.log(err);

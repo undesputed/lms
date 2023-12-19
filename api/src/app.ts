@@ -41,6 +41,7 @@ var corsOptions = {
     "http://localhost:3000",
     "http://13.229.122.211",
     "http://52.221.217.221",
+    "http://18.139.160.37",
   ],
 };
 app.use(json());

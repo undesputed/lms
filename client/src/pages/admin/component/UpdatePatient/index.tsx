@@ -120,18 +120,19 @@ const UpdatePatientForm: React.FC<UpdatePatientProps> = ({
                 type="date"
                 id="outlined-select-currency"
                 helperText="Date of Visit"
-                InputProps={{
-                  inputProps: {
-                    min: new Date().toISOString().split("T")[0], // set minimum date to today's date
-                  },
-                }}
+                // InputProps={{
+                //   inputProps: {
+                //     min: new Date().toISOString().split("T")[0], // set minimum date to today's date
+                //   },
+                // }}
                 style={{
                   width: "100%",
                 }}
-                disabled
+                name={"dateOfVisit"}
                 value={
                   new Date(patient.dateOfVisit).toISOString().split("T")[0]
                 }
+                onChange={(e: any) => onChangeUpdate(e)}
               />
             </Grid>
             <Grid item xs={12} md={12}>
