@@ -64,7 +64,7 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
       if (type === "HEMATOLOGY RESULT") {
         setBackground("#d9d3e9");
       } else if (type === "IMMUNO-SEROLOGY RESULT") {
-        setBackground("#D9D3E9");
+        setBackground("#d9ead3");
       } else if (type === "CLINICAL MICROSCOPY RESULT") {
         setBackground("#D0E2F3");
       } else if (type === "CLINICAL CHEMISTRY RESULT") {
@@ -115,10 +115,15 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
             <TableRow>
               {(function () {
                 let header: any = [];
+
                 if (
                   test?.name.toUpperCase() === "URINALYSIS" ||
                   test?.name.toUpperCase() === "STOOL EXAM" ||
-                  test?.name.toUpperCase() === "CHEST PA(PEDIA/ADULT)"
+                  test?.name.toUpperCase() === "CHEST PA(PEDIA/ADULT)" ||
+                  test?.name.toUpperCase() === "FASTING PROFILE" ||
+                  test?.name.toUpperCase() === "PREGNANCY TEST" ||
+                  test?.name.toUpperCase() === "BLOOD TYPING" ||
+                  test?.name === "HbA1C"
                 ) {
                   header.push();
                 } else {
@@ -577,6 +582,278 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                       </Typography>
                     </Box>
                   </>
+                );
+              }
+
+              if (test?.name.trim().toUpperCase() === "PREGNANCY TEST") {
+                content.push(
+                  <>
+                    <TableRow
+                      sx={{
+                        border: "2px solid #ccc",
+                      }}
+                    >
+                      <TableCell
+                        align="center"
+                        colSpan={2}
+                        sx={{
+                          border: "none",
+                          color: "black",
+                          fontSize: "20px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Pregnancy Test (Serum)
+                      </TableCell>
+                    </TableRow>
+                  </>
+                );
+                result &&
+                  result.map((d, index) => {
+                    content.push(
+                      <TableRow
+                        sx={{
+                          border: "2px solid #ccc",
+                        }}
+                      >
+                        <TableCell
+                          sx={{
+                            border: "2px solid #ccc",
+                            color: "black",
+                          }}
+                          height={50}
+                          align="center"
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Typography>
+                              {d.test_name.toUpperCase()}:{" "}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                color: "black",
+                                fontWeight: "bold",
+                                px: 2,
+                              }}
+                            >
+                              {d.result}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  });
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
+
+              if (test?.name.trim().toUpperCase() === "BLOOD TYPING") {
+                content.push(
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        height: "30rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h3" component={"h4"} color={"black"}>
+                        BLOOD TYPING
+                      </Typography>
+                      {(function () {
+                        let res: any[] = [];
+                        result &&
+                          result.map((d, index) => {
+                            res.push(
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  flexDirection: "row",
+                                  width: "100%",
+                                  pt: "20px",
+                                }}
+                              >
+                                <Grid container>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "right",
+                                        pr: "10px",
+                                      }}
+                                    >
+                                      {d.test_name.toUpperCase()}:
+                                    </Typography>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "left",
+                                        pl: "10px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {d.result}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                              </Box>
+                            );
+                          });
+                        return res;
+                      })()}
+                    </Box>
+                  </>
+                );
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
+
+              if (test?.name === "HbA1C") {
+                content.push(
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        height: "30rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h3" component={"h4"} color={"black"}>
+                        Hemoglobin A1C (HbA1C)
+                      </Typography>
+                      {(function () {
+                        let res: any[] = [];
+                        result &&
+                          result.map((d, index) => {
+                            res.push(
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  flexDirection: "row",
+                                  width: "100%",
+                                  pt: "20px",
+                                }}
+                              >
+                                <Grid container>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "center",
+                                        pr: "10px",
+                                      }}
+                                    >
+                                      RESULT
+                                    </Typography>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "center",
+                                        pl: "10px",
+                                      }}
+                                    >
+                                      REFERENCE RANGE
+                                    </Typography>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "center",
+                                        // pr: "20px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {d.result}
+                                    </Typography>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "center",
+                                        // pl: "20px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {d.refRange}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                              </Box>
+                            );
+                          });
+                        return res;
+                      })()}
+                    </Box>
+                  </>
+                );
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
                 );
               }
 
