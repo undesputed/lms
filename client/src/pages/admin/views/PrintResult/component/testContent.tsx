@@ -120,10 +120,10 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                   test?.name.toUpperCase() === "URINALYSIS" ||
                   test?.name.toUpperCase() === "STOOL EXAM" ||
                   test?.name.toUpperCase() === "CHEST PA(PEDIA/ADULT)" ||
-                  test?.name.toUpperCase() === "FASTING PROFILE" ||
                   test?.name.toUpperCase() === "PREGNANCY TEST" ||
                   test?.name.toUpperCase() === "BLOOD TYPING" ||
-                  test?.name === "HbA1C"
+                  test?.name === "HbA1C" ||
+                  test?.name === "HBsAg Screening"
                 ) {
                   header.push();
                 } else {
@@ -518,37 +518,57 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                 content.push(
                   <>
                     <Box m={5}>
-                      <Typography
-                        sx={{
-                          color: "black",
-                          fontSize: "20px",
-                          fontWeight: "bolder",
-                        }}
+                      <Box
+                        display={"flex"}
+                        mt={1}
+                        justifyContent={"center"}
+                        alignItems={"center"}
                       >
-                        Results:
-                      </Typography>
+                        <Typography
+                          sx={{
+                            color: "black",
+                            fontSize: "20px",
+                            fontWeight: "bolder",
+                          }}
+                        >
+                          X-RAY RESULT
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography
+                          sx={{
+                            color: "black",
+                            fontSize: "20px",
+                            fontWeight: "bolder",
+                          }}
+                        >
+                          Results:
+                        </Typography>
+                      </Box>
                       <Box display={"flex"} flexDirection={"column"} mt={1}>
                         <Typography>
-                          PA view of he chest reveals the lungs are clear.
+                          PA view of the chest reveals the lungs are clear.
                         </Typography>
                         <Typography>
                           Pulmonary structure is and shows vascular markings.
                         </Typography>
                         <Typography>
-                          The mediastinum is centered and of normal width. The
+                          The mediastinum is centered and of normal width.
                         </Typography>
                         <Typography>
-                          tracheal air shadow is midline. The cardiac size and
+                          The tracheal air shadow is midline.
                         </Typography>
                         <Typography>
-                          configuration are within normal limits. Both
+                          The cardiac size and configuration are within normal
+                          limits.
                         </Typography>
                         <Typography>
-                          hemidiaphragms and costophrenic angles are sharp and
+                          Both hemidiaphragms and costophrenic angles are sharp
+                          and intact.
                         </Typography>
                         <Typography>
-                          intact. The visualized osseous thoracic cage shows no
-                          bony abnormality.
+                          The visualized osseous thoracic cage shows no bony
+                          abnormality.
                         </Typography>
                       </Box>
                       <Typography
@@ -837,6 +857,144 @@ const TestContent: React.FC<TestContentProps> = ({ test_id, patient_id }) => {
                                       }}
                                     >
                                       {d.refRange}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                              </Box>
+                            );
+                          });
+                        return res;
+                      })()}
+                    </Box>
+                  </>
+                );
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
+
+              if (test?.name.toUpperCase() === "FASTING PROFILE") {
+                result &&
+                  result.map((d, index) => {
+                    content.push(
+                      <TableRow
+                        sx={{
+                          borderRight: "2px solid #ccc",
+                          borderLeft: "2px solid #ccc",
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {d.test_name.toUpperCase()}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {d.result}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "none",
+                            display: "flex",
+                            justifyContent: "space-around",
+                            color: "black",
+                          }}
+                        >
+                          {d.unit}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ border: "none", color: "black" }}
+                        >
+                          {d.refRange}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  });
+                content.push(
+                  <TableRow
+                    sx={{
+                      border: "2px solid #ccc",
+                    }}
+                  ></TableRow>
+                );
+              }
+
+              if (test?.name === "HBsAg Screening") {
+                content.push(
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        height: "30rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h3" component={"h4"} color={"black"}>
+                        HBsAg Screening
+                      </Typography>
+                      {(function () {
+                        let res: any[] = [];
+                        result &&
+                          result.map((d, index) => {
+                            res.push(
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  flexDirection: "row",
+                                  width: "100%",
+                                  pt: "20px",
+                                }}
+                              >
+                                <Grid container>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "right",
+                                        pr: "10px",
+                                      }}
+                                    >
+                                      {d.test_name.toUpperCase()}:
+                                    </Typography>
+                                  </Grid>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    md={6}
+                                    sx={{ border: "1px solid #ccc" }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        fontSize: "18px",
+                                        textAlign: "left",
+                                        pl: "10px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {d.result}
                                     </Typography>
                                   </Grid>
                                 </Grid>

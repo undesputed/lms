@@ -34,6 +34,7 @@ import { createTestField } from "./routes/testField/createTestFIeld";
 import { deleteTestField } from "./routes/testField/deleteTestField";
 import { updateTestField } from "./routes/testField/updateTestField";
 import { deletePatient } from "./routes/patient/deletePatient";
+import { medcert } from "./routes/medCert/medCert";
 
 const app = express();
 var corsOptions = {
@@ -59,6 +60,7 @@ app.use(testField);
 app.use(testCategoryField);
 app.use(results);
 app.use(test);
+app.use(medcert);
 
 // Create
 app.use(createPatient);

@@ -109,7 +109,7 @@ const PatientHeader: React.FC<PatientProps> = ({ patient, test_id }) => {
                               const year = getDay.getUTCFullYear();
                               const month = getDay.getUTCMonth() + 1;
                               const day = getDay.getUTCDate();
-                              const number = test?.id;
+                              const number = patient.id;
                               return month + "" + day + "" + year + "" + number;
                             })()}
                           </Grid>

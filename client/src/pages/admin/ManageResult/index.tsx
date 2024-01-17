@@ -187,21 +187,33 @@ const ManageResult = () => {
 
   const handleFieldChange = (id: number, event: any) => {
     const { value, name } = event.target;
+
+    // Find the field in patientResult array
     const findField = state.patientResult.find(
       (d) => d.patient_results_id === id
     );
-    findField.result = value;
+
+    // Find the corresponding result in the container array
     const find = state.container.find((d) => d.id === id);
+
+    // Update the result in the patientResult array
+    if (findField) {
+      findField.result = value;
+    }
+
+    // Update the result in the container array
     if (find) {
       find.result = value;
+    } else {
+      // If not found, create a new result object and push it to the container array
+      const result = {
+        result: value,
+        id: id,
+      };
+      state.container.push(result);
     }
-    const result = {
-      result: value,
-      id: id,
-    };
-
-    state.container.push(result);
   };
+
   // End Handle on Change
 
   // Start of Submit Functions
