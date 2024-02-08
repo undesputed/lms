@@ -226,17 +226,16 @@ const ManageResult = () => {
 
   const onAddTest = () => {
     const updatedTestCategory = testCategory.filter((item) => {
-      const existsInCategory = state.testResult.some(
-        (d) => d.test_id.id === item.id
-      );
+      const existsInCategory =
+        state.testResult &&
+        state.testResult.some((d) => d.test_id.id === item.id);
       return !existsInCategory;
     });
+    onOpenTestModal();
     dispatch({
       type: "setFilteredTests",
       payload: updatedTestCategory,
     });
-
-    onOpenTestModal();
   };
 
   const onClickEdit = async (

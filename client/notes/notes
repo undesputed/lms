@@ -1,0 +1,18 @@
+npm run build
+
+go to build in ec2 and rm -rf *
+
+scp -i myweb.pem ./lms.sql ec2-user@ec2-3-0-19-88.ap-southeast-1.compute.amazonaws.com:/lms
+scp -i myweb.pem ./client/build/* ec2-user@ec2-3-0-19-88.ap-southeast-1.compute.amazonaws.com:/var/www/52.221.217.221
+scp -i myweb.pem ./client/build/* ec2-user@ec2-3-0-19-88.ap-southeast-1.compute.amazonaws.com:~/build
+
+scp -i emman.pem ./client/build/* ec2-user@ec2-52-221-218-249.ap-southeast-1.compute.amazonaws.com:~/build
+scp -i emman.pem ./server/.env ec2-user@ec2-52-221-218-249.ap-southeast-1.compute.amazonaws.com:~/eccare/server
+scp -i emman.pem ./dump.sql ec2-user@ec2-52-221-218-249.ap-southeast-1.compute.amazonaws.com:~/
+
+sudo rsync -avz -e "ssh -i eccarenew.pem" ./client/build/ ec2-user@13.229.122.211:~/build
+
+root
+eccare123
+
+nohup npm start > output.log 2>&1 &
